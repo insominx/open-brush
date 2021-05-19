@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Manifest
   m_EditorClassIdentifier: 
   Brushes:
+  - {fileID: 11400000, guid: 32ecc20e0b461c14a9550f1216eddf86, type: 2}
   - {fileID: 11400000, guid: c80c2ea05a3d85e48858a322a18cf5bb, type: 2}
   - {fileID: 11400000, guid: 816add3f326839c4cafce8bfc4a7e26b, type: 2}
   - {fileID: 11400000, guid: 7a3a9d5ee2e492c49b1146ed03806398, type: 2}
