@@ -19,29 +19,54 @@ namespace TiltBrush
 {
     public class PlaneStencil : StencilWidget
     {
+        private Vector3 m_AspectRatio;
         public override Vector3 Extents
         {
             get
             {
-                return m_Size * Vector3.one;
+                return m_Size * m_AspectRatio;
             }
             set
             {
-                if (value.x == value.y && value.x == value.z)
-                {
-                    SetSignedWidgetSize(value.x);
-                }
-                else
-                {
-                    throw new ArgumentException("PlaneStencil does not support non-uniform extents");
-                }
+                m_Size = 1;
+                m_AspectRatio = value;
+                UpdateScale();
             }
         }
+
+        public override Vector3 CustomDimension
+        {
+            get { return m_AspectRatio; }
+            set
+            {
+                m_AspectRatio = value;
+                UpdateScale();
+            }
+        }
+        // public override Vector3 Extents
+        // {
+        //     get
+        //     {
+        //         return m_Size * Vector3.one;
+        //     }
+        //     set
+        //     {
+        //         if (value.x == value.y && value.x == value.z)
+        //         {
+        //             SetSignedWidgetSize(value.x);
+        //         }
+        //         else
+        //         {
+        //             throw new ArgumentException("PlaneStencil does not support non-uniform extents");
+        //         }
+        //     }
+        // }
 
         protected override void Awake()
         {
             base.Awake();
             m_Type = StencilType.Plane;
+            m_AspectRatio = Vector3.one; // [0..1]
         }
 
         public override void FindClosestPointOnSurface(Vector3 pos,
@@ -57,17 +82,6 @@ namespace TiltBrush
 
             surfaceNorm = transform.TransformDirection(surfaceNorm);
             surfacePos = transform.TransformPoint(surfacePos);
-            // Debug.Log(localPos);
-
-            // Plane plane = new Plane(transform.forward, transform.position);
-            // Vector3 point = plane.ClosestPointOnPlane(pos);
-            // surfacePos = point;
-            // surfaceNorm = -transform.forward;
-            //
-            // Vector3 vCenterToPos = pos - transform.position;
-            // float fRadius = Mathf.Abs(GetSignedWidgetSize()) * 0.5f * Coords.CanvasPose.scale;
-            // surfacePos = transform.position + vCenterToPos.normalized * fRadius;
-            // surfaceNorm = vCenterToPos;
         }
 
         override public float GetActivationScore(
@@ -84,6 +98,22 @@ namespace TiltBrush
             Vector3 primaryHand, Vector3 secondaryHand, bool secondaryHandInside)
         {
             return Axis.Invalid;
+        }
+
+        public override void RecordAndApplyScaleToAxis(float deltaScale, Axis axis)
+        {
+            if (m_RecordMovements)
+            {
+                Vector3 newDimensions = CustomDimension;
+                newDimensions[(int)axis] *= deltaScale;
+                SketchMemoryScript.m_Instance.PerformAndRecordCommand(
+                    new MoveWidgetCommand(this, LocalTransform, newDimensions));
+            }
+            else
+            {
+                m_AspectRatio[(int)axis] *= deltaScale;
+                UpdateScale();
+            }
         }
 
         protected override void RegisterHighlightForSpecificAxis(Axis highlightAxis)
@@ -111,6 +141,20 @@ namespace TiltBrush
             }
 
             return axis;
+        }
+
+        override protected void SpoofScaleForShowAnim(float showRatio)
+        {
+            transform.localScale = m_Size * showRatio * m_AspectRatio;
+        }
+
+        protected override void UpdateScale()
+        {
+            float maxAspect = m_AspectRatio.Max();
+            m_AspectRatio /= maxAspect;
+            m_Size *= maxAspect;
+            transform.localScale = m_Size * m_AspectRatio;
+            UpdateMaterialScale();
         }
 
         public override Bounds GetBounds_SelectionCanvasSpace()

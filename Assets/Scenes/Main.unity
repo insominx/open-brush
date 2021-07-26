@@ -27147,7 +27147,7 @@ MonoBehaviour:
   m_DefaultSketchPlaybackMode: 0
   m_GazeMaxAngleFromPointing: 85
   m_GazeMaxAngleFacingToForward: 80
-  m_AtlasIconTextures: 0
+  m_AtlasIconTextures: 1
   m_SaveIconTool: {fileID: 835580262}
   m_DropCam: {fileID: 1038705378}
   m_CreditsSketchFilename: EmbeddedSketches/Credits.tilt
