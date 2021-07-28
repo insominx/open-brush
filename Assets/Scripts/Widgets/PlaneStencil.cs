@@ -28,37 +28,27 @@ namespace TiltBrush
             }
             set
             {
-                m_Size = 1;
+                m_Size = 1f;
                 m_AspectRatio = value;
                 UpdateScale();
+                // if (value.x == value.y && value.x == value.z)
+                // {
+                //     SetSignedWidgetSize(value.x);
+                // }
+                // else
+                // {
+                //     throw new ArgumentException("SphereStencil does not support non-uniform extents");
+                // }
             }
         }
 
-        public override Vector3 CustomDimension
-        {
-            get { return m_AspectRatio; }
-            set
-            {
-                m_AspectRatio = value;
-                UpdateScale();
-            }
-        }
-        // public override Vector3 Extents
+        // public override Vector3 CustomDimension
         // {
-        //     get
-        //     {
-        //         return m_Size * Vector3.one;
-        //     }
+        //     get { return m_AspectRatio; }
         //     set
         //     {
-        //         if (value.x == value.y && value.x == value.z)
-        //         {
-        //             SetSignedWidgetSize(value.x);
-        //         }
-        //         else
-        //         {
-        //             throw new ArgumentException("PlaneStencil does not support non-uniform extents");
-        //         }
+        //         m_AspectRatio = value;
+        //         UpdateScale();
         //     }
         // }
 
@@ -66,12 +56,18 @@ namespace TiltBrush
         {
             base.Awake();
             m_Type = StencilType.Plane;
-            m_AspectRatio = Vector3.one; // [0..1]
+            m_AspectRatio = Vector3.one;
         }
 
+        // Used by
         public override void FindClosestPointOnSurface(Vector3 pos,
                                                        out Vector3 surfacePos, out Vector3 surfaceNorm)
         {
+            // Vector3 vCenterToPos = pos - transform.position;
+            // float fRadius = Mathf.Abs(GetSignedWidgetSize()) * 0.5f * Coords.CanvasPose.scale;
+            // surfacePos = transform.position + vCenterToPos.normalized * fRadius;
+            // surfaceNorm = vCenterToPos;
+
             Vector3 localPos = transform.InverseTransformPoint(pos);
             Vector3 halfWidth = (m_Collider as BoxCollider).size * 0.5f;
             surfacePos.x = Mathf.Clamp(localPos.x, -halfWidth.x, halfWidth.x);
@@ -84,6 +80,7 @@ namespace TiltBrush
             surfacePos = transform.TransformPoint(surfacePos);
         }
 
+        // Used to know when you can grab
         override public float GetActivationScore(
             Vector3 vControllerPos, InputManager.ControllerName name)
         {
@@ -100,21 +97,21 @@ namespace TiltBrush
             return Axis.Invalid;
         }
 
-        public override void RecordAndApplyScaleToAxis(float deltaScale, Axis axis)
-        {
-            if (m_RecordMovements)
-            {
-                Vector3 newDimensions = CustomDimension;
-                newDimensions[(int)axis] *= deltaScale;
-                SketchMemoryScript.m_Instance.PerformAndRecordCommand(
-                    new MoveWidgetCommand(this, LocalTransform, newDimensions));
-            }
-            else
-            {
-                m_AspectRatio[(int)axis] *= deltaScale;
-                UpdateScale();
-            }
-        }
+        // public override void RecordAndApplyScaleToAxis(float deltaScale, Axis axis)
+        // {
+        //     if (m_RecordMovements)
+        //     {
+        //         Vector3 newDimensions = CustomDimension;
+        //         newDimensions[(int)axis] *= deltaScale;
+        //         SketchMemoryScript.m_Instance.PerformAndRecordCommand(
+        //             new MoveWidgetCommand(this, LocalTransform, newDimensions));
+        //     }
+        //     else
+        //     {
+        //         m_AspectRatio[(int)axis] *= deltaScale;
+        //         UpdateScale();
+        //     }
+        // }
 
         protected override void RegisterHighlightForSpecificAxis(Axis highlightAxis)
         {
@@ -143,10 +140,51 @@ namespace TiltBrush
             return axis;
         }
 
-        override protected void SpoofScaleForShowAnim(float showRatio)
+        public override Bounds GetBounds_SelectionCanvasSpace()
         {
-            transform.localScale = m_Size * showRatio * m_AspectRatio;
+            // if (m_Collider != null)
+            // {
+            //     SphereCollider sphere = m_Collider as SphereCollider;
+            //     TrTransform colliderToCanvasXf = App.Scene.SelectionCanvas.Pose.inverse *
+            //         TrTransform.FromTransform(m_Collider.transform);
+            //     Bounds bounds = new Bounds(colliderToCanvasXf * sphere.center, Vector3.zero);
+            //
+            //     // Spheres are invariant with rotation, so take out the rotation from the transform and just
+            //     // add the two opposing corners.
+            //     colliderToCanvasXf.rotation = Quaternion.identity;
+            //     bounds.Encapsulate(colliderToCanvasXf * (sphere.center + sphere.radius * Vector3.one));
+            //     bounds.Encapsulate(colliderToCanvasXf * (sphere.center - sphere.radius * Vector3.one));
+            //
+            //     return bounds;
+            // }
+            // return base.GetBounds_SelectionCanvasSpace();
+
+            if (m_BoxCollider != null)
+            {
+                TrTransform boxColliderToCanvasXf = App.Scene.SelectionCanvas.Pose.inverse *
+                    TrTransform.FromTransform(m_BoxCollider.transform);
+                Bounds bounds = new Bounds(boxColliderToCanvasXf * m_BoxCollider.center, Vector3.zero);
+
+                // Transform the corners of the widget bounds into canvas space and extend the total bounds
+                // to encapsulate them.
+                for (int i = 0; i < 8; i++)
+                {
+                    bounds.Encapsulate(boxColliderToCanvasXf * (m_BoxCollider.center + Vector3.Scale(
+                        m_BoxCollider.size,
+                        new Vector3((i & 1) == 0 ? -0.5f : 0.5f,
+                            (i & 2) == 0 ? -0.5f : 0.5f,
+                            (i & 4) == 0 ? -0.5f : 0.5f))));
+                }
+
+                return bounds;
+            }
+            return new Bounds();
         }
+
+        // override protected void SpoofScaleForShowAnim(float showRatio)
+        // {
+        //     transform.localScale = m_Size * showRatio * m_AspectRatio;
+        // }
 
         protected override void UpdateScale()
         {
@@ -155,26 +193,6 @@ namespace TiltBrush
             m_Size *= maxAspect;
             transform.localScale = m_Size * m_AspectRatio;
             UpdateMaterialScale();
-        }
-
-        public override Bounds GetBounds_SelectionCanvasSpace()
-        {
-            if (m_Collider != null)
-            {
-                SphereCollider sphere = m_Collider as SphereCollider;
-                TrTransform colliderToCanvasXf = App.Scene.SelectionCanvas.Pose.inverse *
-                    TrTransform.FromTransform(m_Collider.transform);
-                Bounds bounds = new Bounds(colliderToCanvasXf * sphere.center, Vector3.zero);
-
-                // Spheres are invariant with rotation, so take out the rotation from the transform and just
-                // add the two opposing corners.
-                colliderToCanvasXf.rotation = Quaternion.identity;
-                bounds.Encapsulate(colliderToCanvasXf * (sphere.center + sphere.radius * Vector3.one));
-                bounds.Encapsulate(colliderToCanvasXf * (sphere.center - sphere.radius * Vector3.one));
-
-                return bounds;
-            }
-            return base.GetBounds_SelectionCanvasSpace();
         }
     }
 } // namespace TiltBrush
