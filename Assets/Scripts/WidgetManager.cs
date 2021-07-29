@@ -120,6 +120,8 @@ namespace TiltBrush
 
         [Header("Stencils")]
         [SerializeField] StencilMapKey[] m_StencilMap;
+
+        [Tooltip ("The distance at which the pointer will snap to the stencil")]
         [SerializeField] private float m_StencilAttractDist = 0.5f;
         [SerializeField] private float m_StencilAttachHysteresis = 0.1f;
         [SerializeField] private string m_StencilLayerName;

@@ -31,26 +31,18 @@ namespace TiltBrush
                 m_Size = 1f;
                 m_AspectRatio = value;
                 UpdateScale();
-                // if (value.x == value.y && value.x == value.z)
-                // {
-                //     SetSignedWidgetSize(value.x);
-                // }
-                // else
-                // {
-                //     throw new ArgumentException("SphereStencil does not support non-uniform extents");
-                // }
             }
         }
 
-        // public override Vector3 CustomDimension
-        // {
-        //     get { return m_AspectRatio; }
-        //     set
-        //     {
-        //         m_AspectRatio = value;
-        //         UpdateScale();
-        //     }
-        // }
+        public override Vector3 CustomDimension
+        {
+            get { return m_AspectRatio; }
+            set
+            {
+                m_AspectRatio = value;
+                UpdateScale();
+            }
+        }
 
         protected override void Awake()
         {
@@ -59,71 +51,102 @@ namespace TiltBrush
             m_AspectRatio = Vector3.one;
         }
 
-        // Used by
+        // Determine where the pointer will be snapped or "magnetized" to on the surface
         public override void FindClosestPointOnSurface(Vector3 pos,
                                                        out Vector3 surfacePos, out Vector3 surfaceNorm)
         {
             Vector3 localPos = transform.InverseTransformPoint(pos);
-            Vector3 halfDimensions = (m_Collider as BoxCollider).size * 0.5f;
+            Vector3 halfDimensions = ((BoxCollider)m_Collider).size * 0.5f;
             surfacePos.x = Mathf.Clamp(localPos.x, -halfDimensions.x, halfDimensions.x);
             surfacePos.y = Mathf.Clamp(localPos.y, -halfDimensions.y, halfDimensions.y);
             surfacePos.z = Mathf.Clamp(localPos.z, -halfDimensions.z, halfDimensions.z);
-            surfacePos.z = halfDimensions.z;
+            surfacePos.z = 0f; // ignore box for depth
             surfaceNorm = -Vector3.forward;
 
             surfaceNorm = transform.TransformDirection(surfaceNorm);
             surfacePos = transform.TransformPoint(surfacePos);
         }
 
-        // Used to know when you can grab
-        override public float GetActivationScore(
+        // Determines when you can grab.  1 = best, 0 = worst, -1 = invalid
+        public override float GetActivationScore(
             Vector3 vControllerPos, InputManager.ControllerName name)
         {
-            float fRadius = Mathf.Abs(GetSignedWidgetSize()) * 0.5f * Coords.CanvasPose.scale;
-            float baseScore = (1.0f - (transform.position - vControllerPos).magnitude / fRadius);
-            // don't try to scale if invalid; scaling by zero will make it look valid
-            if (baseScore < 0) { return baseScore; }
-            return baseScore * Mathf.Pow(1 - m_Size / m_MaxSize_CS, 2);
+            float baseScore = base.GetActivationScore(vControllerPos, name);
+            return baseScore;
         }
 
+        // Determine if whether we are trying to scale along an axis or uniformly (Invalid)
         protected override Axis GetInferredManipulationAxis(
             Vector3 primaryHand, Vector3 secondaryHand, bool secondaryHandInside)
         {
-            return Axis.Invalid;
+            if (secondaryHandInside)
+            {
+                return Axis.Invalid;
+            }
+            Vector3 vHandsInObjectSpace = transform.InverseTransformDirection(primaryHand - secondaryHand);
+            Vector3 vAbs = vHandsInObjectSpace.Abs();
+            if (vAbs.x > vAbs.y && vAbs.x > vAbs.z)
+            {
+                return Axis.X;
+            }
+            else if (vAbs.y > vAbs.z)
+            {
+                return Axis.Y;
+            }
+            else
+            {
+                return Axis.Invalid;
+            }
         }
 
-        // public override void RecordAndApplyScaleToAxis(float deltaScale, Axis axis)
-        // {
-        //     if (m_RecordMovements)
-        //     {
-        //         Vector3 newDimensions = CustomDimension;
-        //         newDimensions[(int)axis] *= deltaScale;
-        //         SketchMemoryScript.m_Instance.PerformAndRecordCommand(
-        //             new MoveWidgetCommand(this, LocalTransform, newDimensions));
-        //     }
-        //     else
-        //     {
-        //         m_AspectRatio[(int)axis] *= deltaScale;
-        //         UpdateScale();
-        //     }
-        // }
+        // Apply scale and make it undo-able
+        public override void RecordAndApplyScaleToAxis(float deltaScale, Axis axis)
+        {
+            if (m_RecordMovements)
+            {
+                Vector3 newDimensions = CustomDimension;
+                newDimensions[(int)axis] *= deltaScale;
+                SketchMemoryScript.m_Instance.PerformAndRecordCommand(
+                    new MoveWidgetCommand(this, LocalTransform, newDimensions));
+            }
+            else
+            {
+                m_AspectRatio[(int)axis] *= deltaScale;
+                UpdateScale();
+            }
+        }
 
         protected override void RegisterHighlightForSpecificAxis(Axis highlightAxis)
         {
-            throw new NotImplementedException();
+            if (m_HighlightMeshFilters != null)
+            {
+                for (int i = 0; i < m_HighlightMeshFilters.Length; i++)
+                {
+                    App.Instance.SelectionEffect.RegisterMesh(m_HighlightMeshFilters[i]);
+                }
+            }
         }
 
-        public override Axis GetScaleAxis(
-            Vector3 handA, Vector3 handB,
+        // Using the locked axis, get the scaled direction of the axis
+        public override Axis GetScaleAxis(Vector3 handA, Vector3 handB,
             out Vector3 axisVec, out float extent)
         {
             // Unexpected -- normally we're only called during a 2-handed manipulation
             Debug.Assert(m_LockedManipulationAxis != null);
             Axis axis = m_LockedManipulationAxis ?? Axis.Invalid;
 
+            float parentScale = TrTransform.FromTransform(transform.parent).scale;
+
             // Fill in axisVec, extent
             switch (axis)
             {
+                case Axis.X:
+                case Axis.Y:
+                    Vector3 axisVec_LS = Vector3.zero;
+                    axisVec_LS[(int)axis] = 1;
+                    axisVec = transform.TransformDirection(axisVec_LS);
+                    extent = parentScale * Extents[(int)axis];
+                    break;
                 case Axis.Invalid:
                     axisVec = default(Vector3);
                     extent = default(float);
@@ -137,23 +160,6 @@ namespace TiltBrush
 
         public override Bounds GetBounds_SelectionCanvasSpace()
         {
-            // if (m_Collider != null)
-            // {
-            //     SphereCollider sphere = m_Collider as SphereCollider;
-            //     TrTransform colliderToCanvasXf = App.Scene.SelectionCanvas.Pose.inverse *
-            //         TrTransform.FromTransform(m_Collider.transform);
-            //     Bounds bounds = new Bounds(colliderToCanvasXf * sphere.center, Vector3.zero);
-            //
-            //     // Spheres are invariant with rotation, so take out the rotation from the transform and just
-            //     // add the two opposing corners.
-            //     colliderToCanvasXf.rotation = Quaternion.identity;
-            //     bounds.Encapsulate(colliderToCanvasXf * (sphere.center + sphere.radius * Vector3.one));
-            //     bounds.Encapsulate(colliderToCanvasXf * (sphere.center - sphere.radius * Vector3.one));
-            //
-            //     return bounds;
-            // }
-            // return base.GetBounds_SelectionCanvasSpace();
-
             if (m_BoxCollider != null)
             {
                 TrTransform boxColliderToCanvasXf = App.Scene.SelectionCanvas.Pose.inverse *
@@ -176,11 +182,8 @@ namespace TiltBrush
             return new Bounds();
         }
 
-        // override protected void SpoofScaleForShowAnim(float showRatio)
-        // {
-        //     transform.localScale = m_Size * showRatio * m_AspectRatio;
-        // }
 
+        // Actually perform the scale change on the Unity transform along with tiling the material
         protected override void UpdateScale()
         {
             float maxAspect = m_AspectRatio.Max();
