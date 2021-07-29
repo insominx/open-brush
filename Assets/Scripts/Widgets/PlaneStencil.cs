@@ -63,17 +63,12 @@ namespace TiltBrush
         public override void FindClosestPointOnSurface(Vector3 pos,
                                                        out Vector3 surfacePos, out Vector3 surfaceNorm)
         {
-            // Vector3 vCenterToPos = pos - transform.position;
-            // float fRadius = Mathf.Abs(GetSignedWidgetSize()) * 0.5f * Coords.CanvasPose.scale;
-            // surfacePos = transform.position + vCenterToPos.normalized * fRadius;
-            // surfaceNorm = vCenterToPos;
-
             Vector3 localPos = transform.InverseTransformPoint(pos);
-            Vector3 halfWidth = (m_Collider as BoxCollider).size * 0.5f;
-            surfacePos.x = Mathf.Clamp(localPos.x, -halfWidth.x, halfWidth.x);
-            surfacePos.y = Mathf.Clamp(localPos.y, -halfWidth.y, halfWidth.y);
-            surfacePos.z = Mathf.Clamp(localPos.z, -halfWidth.z, halfWidth.z);
-            surfacePos.z = halfWidth.z;
+            Vector3 halfDimensions = (m_Collider as BoxCollider).size * 0.5f;
+            surfacePos.x = Mathf.Clamp(localPos.x, -halfDimensions.x, halfDimensions.x);
+            surfacePos.y = Mathf.Clamp(localPos.y, -halfDimensions.y, halfDimensions.y);
+            surfacePos.z = Mathf.Clamp(localPos.z, -halfDimensions.z, halfDimensions.z);
+            surfacePos.z = halfDimensions.z;
             surfaceNorm = -Vector3.forward;
 
             surfaceNorm = transform.TransformDirection(surfaceNorm);
