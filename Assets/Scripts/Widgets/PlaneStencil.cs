@@ -17,6 +17,11 @@ using UnityEngine;
 
 namespace TiltBrush
 {
+    /*
+     * Implements a basic plane guide (known as a stencil in code.  This provides a cleaner way
+     * for mimicking a whiteboard for usages simply beyond painting on a flat surface.
+     */
+
     public class PlaneStencil : StencilWidget
     {
         private Vector3 m_AspectRatio;
