@@ -12,14 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using UnityEngine;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using UnityEngine;
+using UnityEngine.Profiling;
 namespace TiltBrush
 {
 
-    [System.Serializable]
+    [Serializable]
     public struct PanelMapKey
     {
         public GameObject m_PanelPrefab;
@@ -30,6 +31,7 @@ namespace TiltBrush
         public bool m_ModeGvr;
         public bool m_Basic;
         public bool m_Advanced;
+        public bool m_Whiteboard;
 
         public bool IsValidForSdkMode(SdkMode mode)
         {
@@ -230,10 +232,12 @@ namespace TiltBrush
             {
                 get
                 {
+                    bool isAdmin = m_Instance.IsAdminPanel(m_Panel.Type);
+                    bool beginner = m_Instance.BeginnerModeActive() && !m_Panel.AdvancedModePanel && !m_Panel.WhiteboardModePanel;
+                    bool advanced = m_Instance.AdvancedModeActive() && m_Panel.AdvancedModePanel;
+                    bool whiteboard = m_Instance.WhiteboardModeActive() && m_Panel.WhiteboardModePanel;
                     // Admin panel is always available.
-                    return (PanelManager.m_Instance.IsAdminPanel(m_Panel.Type) ||
-                        (PanelManager.m_Instance.AdvancedModeActive() ==
-                        m_Panel.AdvancedModePanel));
+                    return isAdmin || beginner || advanced || whiteboard;
                 }
             }
         }
@@ -282,6 +286,7 @@ namespace TiltBrush
         private bool m_IntroSketchbookMode;
         private bool m_FirstSketchLoad = true;
         private bool m_AdvancedPanels;
+        private bool m_WhiteboardPanels;
 
         public Color PanelHighlightActiveColor
         {
@@ -318,7 +323,9 @@ namespace TiltBrush
         public bool MemoryWarningActive() { return m_PanelsMode == PanelMode.MemoryWarning; }
         public bool BrushLabActive() { return m_PanelsMode == PanelMode.BrushLab; }
         public bool PanelsHaveBeenCustomized() { return m_PanelsCustomized; }
+        public bool BeginnerModeActive() { return !m_AdvancedPanels && !m_WhiteboardPanels; }
         public bool AdvancedModeActive() { return m_AdvancedPanels; }
+        public bool WhiteboardModeActive() { return m_WhiteboardPanels; }
         public bool SketchbookActiveIncludingTransitions()
         {
             return SketchbookActive() || m_PanelsMode == PanelMode.StandardToSketchbook;
@@ -414,7 +421,9 @@ namespace TiltBrush
             m_SketchbookScale = 0.0f;
 
             // Start with advanced panels off.
-            m_AdvancedPanels = PlayerPrefs.GetInt(kPlayerPrefAdvancedMode, 0) == 1;
+            int modeValue = PlayerPrefs.GetInt(kPlayerPrefAdvancedMode, 0);
+            m_AdvancedPanels = modeValue == 1;
+            m_WhiteboardPanels = modeValue == 2;
 
             // Cache any advanced panel layout we can pull from disk.
             m_CachedPanelLayouts = new AdvancedPanelLayouts();
@@ -435,18 +444,22 @@ namespace TiltBrush
                     // Only create one of our unique panels
                     if (IsPanelUnique(type))
                     {
-                        CreatePanel(m_PanelMap[i], false);
+                        CreatePanel(m_PanelMap[i], false, false);
                     }
                     else
                     {
                         // Create a panel for each mode.
                         if (m_PanelMap[i].m_Basic)
                         {
-                            CreatePanel(m_PanelMap[i], false);
+                            CreatePanel(m_PanelMap[i], false, false);
                         }
                         if (m_PanelMap[i].m_Advanced)
                         {
-                            CreatePanel(m_PanelMap[i], true);
+                            CreatePanel(m_PanelMap[i], true, false);
+                        }
+                        if (m_PanelMap[i].m_Whiteboard)
+                        {
+                            CreatePanel(m_PanelMap[i], false, true);
                         }
                     }
                 }
@@ -500,10 +513,10 @@ namespace TiltBrush
             }
         }
 
-        void CreatePanel(PanelMapKey key, bool advancedPanel)
+        void CreatePanel(PanelMapKey key, bool advancedPanel, bool whiteboardPanel)
         {
             GameObject obj = Instantiate(key.m_PanelPrefab);
-            obj.name += advancedPanel ? "_Advanced" : "_Basic";
+            obj.name += advancedPanel ? "_Advanced" : (whiteboardPanel) ? "_Whiteboard": "_Basic";
 
             BasePanel p = obj.GetComponent<BasePanel>();
             obj.transform.position = p.m_InitialSpawnPos;
@@ -514,11 +527,11 @@ namespace TiltBrush
             {
                 // We have to turn on each panel so the Awake() function runs.
                 p.gameObject.SetActive(true);
-                p.InitAdvancedFlag(advancedPanel);
+                p.InitModeFlag(advancedPanel, whiteboardPanel);
 
                 // See if this panel has a cached attributes.
                 bool attributesFromDisk = false;
-                if (advancedPanel)
+                if (advancedPanel || whiteboardPanel)
                 {
                     attributesFromDisk = m_CachedPanelLayouts.ApplyLayoutToPanel(p);
                 }
@@ -691,7 +704,8 @@ namespace TiltBrush
                 if (!IsPanelUnique(panel.Type))
                 {
                     PanelWidget widget = m_AllPanels[i].m_Widget;
-                    if (m_AdvancedPanels != panel.AdvancedModePanel)
+                    if (m_AdvancedPanels != panel.AdvancedModePanel &&
+                        m_WhiteboardPanels != panel.WhiteboardModePanel)
                     {
                         widget.ForceInvisibleForInit();
                     }
@@ -734,12 +748,13 @@ namespace TiltBrush
         // but floating panels never get revived.
         public void ReviveFloatingPanelsForStartup()
         {
-            if (m_AdvancedPanels)
+            if (m_AdvancedPanels || m_WhiteboardPanels)
             {
                 for (int i = 0; i < m_AllPanels.Count; ++i)
                 {
                     BasePanel p = m_AllPanels[i].m_Panel;
-                    if (!IsPanelUnique(p.Type) && p.AdvancedModePanel && !p.m_Fixed)
+                    bool advancedOrWhiteboard = p.AdvancedModePanel || p.WhiteboardModePanel;
+                    if (!IsPanelUnique(p.Type) && advancedOrWhiteboard && !p.m_Fixed)
                     {
                         m_CachedPanelLayouts.ReviveFloatingPanelWithLayout(p);
                     }
@@ -747,9 +762,23 @@ namespace TiltBrush
             }
         }
 
-        public void ToggleAdvancedPanels()
+        public void TogglePanelMode()
         {
-            m_AdvancedPanels ^= true;
+            if (m_AdvancedPanels)
+            {
+                m_AdvancedPanels = false;
+                m_WhiteboardPanels = true;
+            }
+            else if (m_WhiteboardPanels)
+            {
+                m_AdvancedPanels = false;
+                m_WhiteboardPanels = false;
+            }
+            else
+            {
+                m_AdvancedPanels = true;
+                m_WhiteboardPanels = false;
+            }
 
             // If we've been in advanced panels before, just spin around once.
             m_AdvancedModeRevealSpinValue = 0.0f;
@@ -758,7 +787,7 @@ namespace TiltBrush
 
             // If we haven't been in advanced panels mode before, spin to the tools panel to highlight all
             // the cool stuff that's been unlocked.
-            if (m_AdvancedPanels &&
+            if ((m_AdvancedPanels || m_WhiteboardPanels) &&
                 !PromoManager.m_Instance.HasPromoBeenCompleted(PromoType.AdvancedPanels))
             {
                 // Find the tools panel.
@@ -785,7 +814,23 @@ namespace TiltBrush
                 }
             }
             m_AdvancedModeRevealActive = true;
-            PlayerPrefs.SetInt(kPlayerPrefAdvancedMode, m_AdvancedPanels ? 1 : 0);
+
+            if (m_AdvancedPanels && m_WhiteboardPanels)
+            {
+                Debug.LogError("should not happen");
+            }
+
+            int modeValue = 0;
+            if (m_AdvancedPanels)
+            {
+                modeValue = 1;
+            }
+            else if (m_WhiteboardPanels)
+            {
+                modeValue = 2;
+            }
+            PlayerPrefs.SetInt(kPlayerPrefAdvancedMode, modeValue);
+
             AudioManager.m_Instance.AdvancedModeSwitch(m_AdvancedPanels);
             App.Switchboard.TriggerAdvancedPanelsChanged();
 
@@ -811,6 +856,28 @@ namespace TiltBrush
                     }
                 }
             }
+            else if (m_WhiteboardPanels)
+            {
+                for (int i = 0; i < m_AllPanels.Count; ++i)
+                {
+                    BasePanel panel = m_AllPanels[i].m_Panel;
+                    if (IsPanelUnique(panel.Type))
+                    {
+                        continue;
+                    }
+                    // Turn on panel if it is an whiteboard panel.
+                    if (panel.WhiteboardModePanel && panel.CurrentlyVisibleInWhiteboardMode)
+                    {
+                        _RestorePanelInternal(i);
+                        panel.ForceUpdatePanelVisuals();
+                    }
+                    // Turn off panel if it is a basic panel.
+                    if (!panel.WhiteboardModePanel)
+                    {
+                        _DismissPanelInternal(i, false);
+                    }
+                }
+            }
             else
             {
                 for (int i = 0; i < m_AllPanels.Count; ++i)
@@ -821,13 +888,13 @@ namespace TiltBrush
                         continue;
                     }
                     // Turn on panel basic mode panels.
-                    if (!panel.AdvancedModePanel)
+                    if (!panel.AdvancedModePanel && !panel.WhiteboardModePanel)
                     {
                         _RestorePanelInternal(i);
                         panel.ForceUpdatePanelVisuals();
                     }
                     // Turn off advanced mode panels.
-                    if (panel.AdvancedModePanel)
+                    if (panel.AdvancedModePanel || panel.WhiteboardModePanel)
                     {
                         _DismissPanelInternal(i, false);
                     }
@@ -1123,14 +1190,14 @@ namespace TiltBrush
             }
 #endif
 
-            UnityEngine.Profiling.Profiler.BeginSample("PanelManager.UpdatePanels");
+            Profiler.BeginSample("PanelManager.UpdatePanels");
             // Lock panels to the controller if we've got 6dof controls.
             if (SketchControlsScript.m_Instance.ActiveControlsType ==
                 SketchControlsScript.ControlsType.SixDofControllers)
             {
                 LockPanelsToController();
             }
-            UnityEngine.Profiling.Profiler.EndSample();
+            Profiler.EndSample();
         }
 
         float GetWandCircumference()
@@ -1661,7 +1728,7 @@ namespace TiltBrush
             }
 
             // Write this config to disk.
-            if (m_AdvancedPanels)
+            if (m_AdvancedPanels || m_WhiteboardPanels)
             {
                 m_CachedPanelLayouts.WriteToDisk(m_AllPanels);
             }
@@ -2045,6 +2112,7 @@ namespace TiltBrush
         {
             float fStandardScale = m_MasterScale * m_StandardScale;
             bool bStandardActive = fStandardScale > 0.0f;
+            PanelData[] asdf = GetFixedPanels().ToArray();
             foreach (PanelData p in GetFixedPanels())
             {
                 if (p.AvailableInCurrentMode)
@@ -2504,7 +2572,7 @@ namespace TiltBrush
         }
 
         // General use function for calling a method on all panels of a type.
-        public void ExecuteOnPanel<T>(System.Action<T> action) where T : BasePanel
+        public void ExecuteOnPanel<T>(Action<T> action) where T : BasePanel
         {
             for (int i = 0; i < m_AllPanels.Count; ++i)
             {

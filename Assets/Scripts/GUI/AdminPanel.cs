@@ -38,6 +38,7 @@ namespace TiltBrush
         [SerializeField] GameObject m_AdvancedModeBorder;
         [SerializeField] GameObject m_BeginnerModeButton;
         [SerializeField] GameObject m_AdvancedModeButton;
+        [SerializeField] GameObject m_WhiteboardModeButton;
         [SerializeField] GameObject m_ButtonRotationContainer;
         [SerializeField] GameObject m_MemoryWarning;
         [SerializeField] GameObject m_MemoryWarningButton;
@@ -70,11 +71,14 @@ namespace TiltBrush
         {
             // Settings in basic mode, More... in advanced mode.
             bool advancedMode = PanelManager.m_Instance.AdvancedModeActive();
+            bool whiteboardMode = PanelManager.m_Instance.WhiteboardModeActive();
+
             m_SettingsButton.SetActive(!advancedMode);
             m_MoreButton.SetActive(advancedMode);
 
-            m_AdvancedModeButton.SetActive(!advancedMode);
-            m_BeginnerModeButton.SetActive(advancedMode);
+            m_AdvancedModeButton.SetActive(advancedMode);
+            m_BeginnerModeButton.SetActive(!advancedMode && !whiteboardMode);
+            m_WhiteboardModeButton.SetActive(whiteboardMode);
 
             m_Border.gameObject.SetActive(!advancedMode);
             m_AdvancedModeBorder.SetActive(advancedMode);

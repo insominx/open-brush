@@ -21,6 +21,9 @@ MonoBehaviour:
   m_Nondeterministic: 0
   m_Supersedes: {fileID: 0}
   m_LooksIdentical: 0
+  inBeginnerMode: 1
+  inAdvancedMode: 1
+  inWhiteboardMode: 1
   m_ButtonTexture: {fileID: 2800000, guid: ea30e3f95aa84414ea4b0f0ce0868f21, type: 3}
   m_Description: Toon
   m_DescriptionExtra: 

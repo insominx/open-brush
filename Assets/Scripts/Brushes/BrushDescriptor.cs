@@ -84,6 +84,11 @@ namespace TiltBrush
         [Tooltip("True if this brush looks identical to the version it supersedes. Causes brush to be silently-upgraded on load, and silently-downgraded to the maximally-compatible version on save")]
         public bool m_LooksIdentical = false;
 
+        [Header("Mode Availability")]
+        public bool inBeginnerMode = true;
+        public bool inAdvancedMode = true;
+        public bool inWhiteboardMode;
+
         [Header("GUI")]
         public Texture2D m_ButtonTexture;
         [Tooltip("Name of the brush, in the UI and elsewhere")]

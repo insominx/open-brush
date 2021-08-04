@@ -270,7 +270,9 @@ namespace TiltBrush
         private float m_PopUpGazeTimer;
 
         private bool m_AdvancedModePanel;
+        private bool m_WhiteboardModePanel;
         private bool m_CurrentlyVisibleInAdvancedMode;
+        private bool m_CurrentlyVisibleInWhiteboardMode;
 
         // TODO: The following are just to track down an elusive NRE. Delete when we've figured
         // it out.
@@ -294,7 +296,9 @@ namespace TiltBrush
         }
         public PanelWidget WidgetSibling { get { return m_WidgetSibling; } }
         public bool AdvancedModePanel { get { return m_AdvancedModePanel; } }
+        public bool WhiteboardModePanel { get { return m_WhiteboardModePanel; } }
         public bool CurrentlyVisibleInAdvancedMode { get { return m_CurrentlyVisibleInAdvancedMode; } }
+        public bool CurrentlyVisibleInWhiteboardMode { get { return m_CurrentlyVisibleInAdvancedMode; } }
         public Vector3 ParticleBounds { get { return m_ParticleBounds; } }
         public PopUpWindow PanelPopUp { get { return m_ActivePopUp; } }
 
@@ -312,9 +316,10 @@ namespace TiltBrush
 
         public virtual bool ShouldRegister { get { return true; } }
 
-        public void InitAdvancedFlag(bool advanced)
+        public void InitModeFlag(bool advanced, bool whiteboard)
         {
             m_AdvancedModePanel = advanced;
+            m_WhiteboardModePanel = whiteboard;
             m_CurrentlyVisibleInAdvancedMode = m_BeginFixed;
         }
 

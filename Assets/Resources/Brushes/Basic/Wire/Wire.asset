@@ -21,6 +21,9 @@ MonoBehaviour:
   m_Nondeterministic: 0
   m_Supersedes: {fileID: 0}
   m_LooksIdentical: 0
+  inBeginnerMode: 1
+  inAdvancedMode: 1
+  inWhiteboardMode: 1
   m_ButtonTexture: {fileID: 2800000, guid: 6909e1c1eaf104f4b98a16be1fb85cf3, type: 3}
   m_Description: Wire
   m_DescriptionExtra: 

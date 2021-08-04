@@ -93,6 +93,12 @@ namespace TiltBrush
             get { return m_GuiBrushList; }
         }
 
+        // mg hack
+        public List<Brush> GuiWhiteboardBrushList
+        {
+            get { return m_GuiBrushList.Where((brush) => brush.inWhiteboardMode).ToList(); }
+        }
+
         void Awake()
         {
             m_Instance = this;

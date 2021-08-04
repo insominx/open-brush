@@ -4597,14 +4597,35 @@ namespace TiltBrush
                         break;
                     }
                 case GlobalCommands.AdvancedPanelsToggle:
-                    m_PanelManager.ToggleAdvancedPanels();
+                    m_PanelManager.TogglePanelMode();
+
+                    bool nowInBeginnerMode = !m_PanelManager.AdvancedModeActive() && !m_PanelManager.WhiteboardModeActive();
+                    bool nowInAdvancedMode = m_PanelManager.AdvancedModeActive();
+                    bool nowInWhiteboardMode = m_PanelManager.WhiteboardModeActive();
+
+                    Debug.Log($"beginner: ({nowInBeginnerMode}), advanced: ({nowInAdvancedMode}), whiteboard: ({nowInWhiteboardMode})");
+
                     // If we're now in basic mode, ensure we don't have advanced abilities.
-                    if (!m_PanelManager.AdvancedModeActive())
+                    if (nowInBeginnerMode)
                     {
                         m_WidgetManager.StencilsDisabled = true;
                         m_WidgetManager.CameraPathsVisible = false;
                         App.Switchboard.TriggerStencilModeChanged();
                         m_SketchSurfacePanel.EnsureUserHasBasicToolEnabled();
+                        if (PointerManager.m_Instance.CurrentSymmetryMode != SymmetryMode.None)
+                        {
+                            PointerManager.m_Instance.SetSymmetryMode(SymmetryMode.None, false);
+                        }
+                    }
+                    else if (nowInAdvancedMode)
+                    {
+                        // m_WidgetManager.CameraPathsVisible = true;
+                    }
+                    else if (nowInWhiteboardMode)
+                    {
+                        m_WidgetManager.StencilsDisabled = true;
+                        m_WidgetManager.CameraPathsVisible = false;
+                        // m_SketchSurfacePanel.EnsureUserHasBasicToolEnabled();
                         if (PointerManager.m_Instance.CurrentSymmetryMode != SymmetryMode.None)
                         {
                             PointerManager.m_Instance.SetSymmetryMode(SymmetryMode.None, false);

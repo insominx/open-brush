@@ -21,6 +21,9 @@ MonoBehaviour:
   m_Nondeterministic: 0
   m_Supersedes: {fileID: 11400000, guid: d55d8be5dac1cf748abe4ae1ae7fc341, type: 2}
   m_LooksIdentical: 1
+  inBeginnerMode: 1
+  inAdvancedMode: 1
+  inWhiteboardMode: 1
   m_ButtonTexture: {fileID: 2800000, guid: 9fc22eeaa38b9dd42b4ffa44cac359a5, type: 3}
   m_Description: Paper
   m_DescriptionExtra: 

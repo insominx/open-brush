@@ -46,18 +46,18 @@ namespace TiltBrush
         public const float UNITS_TO_METERS = .1f;
 
         // This is the name of the app, as displayed to the users running it.
-        public const string kAppDisplayName = "Open Brush";
+        public const string kAppDisplayName = "Tilt Board";
         // The vendor name - used for naming android builds - shouldn't have spaces.
-        public const string kVendorName = "Icosa";
+        public const string kVendorName = "NPS";
         // The vendor name - used for the company name in builds and fbx output. Can have spaces.
-        public const string kDisplayVendorName = "Icosa";
+        public const string kDisplayVendorName = "NPS";
         // This is the App name used when speaking to Google services
         public const string kGoogleServicesAppName = kAppDisplayName;
         // The name of the configuration file. You may want to change this if you think your users may
         // want to have a different config file for your edition of the app.
         public const string kConfigFileName = "Open Brush.cfg";
         // The name of the App folder (In the user's Documents folder) - original Tilt Brush used "Tilt Brush"
-        // If you are forking Open Brush, you may want to leave this as "Open Brush" or not. 
+        // If you are forking Open Brush, you may want to leave this as "Open Brush" or not.
         public const string kAppFolderName = "Open Brush";
         // The data folder used on Google Drive.
         public const string kDriveFolderName = kAppDisplayName;

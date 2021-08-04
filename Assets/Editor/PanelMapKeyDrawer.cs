@@ -94,6 +94,11 @@ namespace TiltBrush
                 EditorGUI.PropertyField(drawRect, prop.FindPropertyRelative("m_Advanced"), GUIContent.none);
                 NextRect(baseX, pos.y, 60, baseHeight, 60);
                 EditorGUI.LabelField(drawRect, new GUIContent("Advanced"));
+
+                NextRect(baseX, pos.y, 10, baseHeight, 12);
+                EditorGUI.PropertyField(drawRect, prop.FindPropertyRelative("m_Whiteboard"), GUIContent.none);
+                NextRect(baseX, pos.y, 60, baseHeight, 60);
+                EditorGUI.LabelField(drawRect, new GUIContent("Whiteboard"));
             }
 
             // Set indent back to what it was
