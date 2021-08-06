@@ -68,6 +68,7 @@ namespace TiltBrush
             BrushController.m_Instance.BrushSetToDefault += OnBrushSetToDefault;
             BrushController.m_Instance.StrokeSelected += OnStrokeSelected;
             App.Switchboard.AudioReactiveStateChanged += OnAudioReactiveStateChanged;
+            App.Switchboard.PanelModeChanged += OnPanelModeChanged;
 
             // Cache brush buttons.
             m_BrushButtons = GetComponentsInChildren<BrushTypeButton>();
@@ -235,6 +236,8 @@ namespace TiltBrush
             int numBrushes = m_TagFilteredBrushes.Length;
             m_NumPages = ((numBrushes - 1) / m_BrushButtons.Length) + 1;
 
+            Debug.Log($"num pages {m_NumPages}");
+
             float pages = (float)m_NumPages;
             ControllerMaterialCatalog.m_Instance.BrushPage.SetFloat("_UsedIconCount", pages);
             ControllerMaterialCatalog.m_Instance.BrushPageActive.SetFloat("_UsedIconCount", pages);
@@ -307,11 +310,22 @@ namespace TiltBrush
         // Since we cache brush textures, we need to deal with them getting Destroy()ed etc.
         void OnBrushCatalogChanged()
         {
+            ResetPages();
+        }
+
+        void OnPanelModeChanged()
+        {
+            ResetPages();
+        }
+
+        void ResetPages()
+        {
             m_TagFilteredBrushes = BrushCatalog.m_Instance.GetTagFilteredBrushList();
 
             CountPages();
-            RefreshButtonPositions();
             SetPageIndexToDefault();
+            RefreshButtonPositions();
+            ResetState();
         }
 
         // TODO : See if we can make BrushGrid not use Update.

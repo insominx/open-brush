@@ -425,6 +425,12 @@ namespace TiltBrush
             m_AdvancedPanels = modeValue == 1;
             m_WhiteboardPanels = modeValue == 2;
 
+            // hack
+            if (m_WhiteboardPanels)
+            {
+                App.UserConfig.Brushes.EligibleTags = new string[] { "classroom" };
+            }
+
             // Cache any advanced panel layout we can pull from disk.
             m_CachedPanelLayouts = new AdvancedPanelLayouts();
             m_CachedPanelLayouts.PopulateFromPlayerPrefs();
@@ -768,11 +774,17 @@ namespace TiltBrush
             {
                 m_AdvancedPanels = false;
                 m_WhiteboardPanels = true;
+
+                // hack
+                App.UserConfig.Brushes.EligibleTags = new[] { "classroom" };
             }
             else if (m_WhiteboardPanels)
             {
                 m_AdvancedPanels = false;
                 m_WhiteboardPanels = false;
+
+                // hack
+                App.UserConfig.Brushes.EligibleTags = new[] { "default" };
             }
             else
             {
@@ -832,7 +844,6 @@ namespace TiltBrush
             PlayerPrefs.SetInt(kPlayerPrefAdvancedMode, modeValue);
 
             AudioManager.m_Instance.AdvancedModeSwitch(m_AdvancedPanels);
-            App.Switchboard.TriggerAdvancedPanelsChanged();
 
             if (m_AdvancedPanels)
             {
@@ -917,6 +928,8 @@ namespace TiltBrush
                     p.m_RevealParticles.StartEmitting();
                 }
             }
+
+            App.Switchboard.TriggerAdvancedPanelsChanged();
         }
 
         IEnumerable<PanelData> GetFixedPanels()
