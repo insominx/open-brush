@@ -605,10 +605,12 @@ namespace TiltBrush
                 m_TransitionState = FixedTransitionState.Fixed;
             }
 
+            bool advancedOrWhiteboard = m_AdvancedModePanel || m_WhiteboardModePanel;
+
             // Bake border meshs.
-            float width = !m_AdvancedModePanel ? m_BorderMeshAdvWidth : m_BorderMeshWidth;
-            Color baseCol = !m_AdvancedModePanel ? pm.PanelBorderMeshOutlineColor : pm.PanelBorderMeshBaseColor;
-            Color outlineCol = !m_AdvancedModePanel ? pm.PanelBorderMeshBaseColor : pm.PanelBorderMeshOutlineColor;
+            float width = !advancedOrWhiteboard ? m_BorderMeshAdvWidth : m_BorderMeshWidth;
+            Color baseCol = !advancedOrWhiteboard ? pm.PanelBorderMeshOutlineColor : pm.PanelBorderMeshBaseColor;
+            Color outlineCol = !advancedOrWhiteboard ? pm.PanelBorderMeshBaseColor : pm.PanelBorderMeshOutlineColor;
             BakedMeshOutline[] bakeries = GetComponentsInChildren<BakedMeshOutline>(true);
             BakedMeshOutline borderBakery = m_Border.GetComponent<BakedMeshOutline>();
             for (int i = 0; i < bakeries.Length; ++i)

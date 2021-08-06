@@ -149,7 +149,7 @@ namespace TiltBrush
             Vector3 vControllerPos, InputManager.ControllerName name)
         {
             // Not allowed to grab panels unless we're in advanced mode.
-            if (!PanelManager.m_Instance.AdvancedModeActive())
+            if (!PanelManager.m_Instance.AdvancedModeActive() && !PanelManager.m_Instance.WhiteboardModeActive())
             {
                 return -1.0f;
             }
