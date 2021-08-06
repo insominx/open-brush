@@ -420,15 +420,17 @@ namespace TiltBrush
             m_StandardScale = 1.0f;
             m_SketchbookScale = 0.0f;
 
-            // Start with advanced panels off.
-            int modeValue = PlayerPrefs.GetInt(kPlayerPrefAdvancedMode, 0);
+            // Start off in whiteboard mode
+            int modeValue = PlayerPrefs.GetInt(kPlayerPrefAdvancedMode, 2);
             m_AdvancedPanels = modeValue == 1;
             m_WhiteboardPanels = modeValue == 2;
 
-            // hack
+            // hack, add classroom to the list if it isn't already there
+            // When this tag is present, the brush list will be filtered to the relevant ones
             if (m_WhiteboardPanels)
             {
-                App.UserConfig.Brushes.EligibleTags = new string[] { "classroom" };
+                _AddEligibleTag("classroom");
+                _RemoveEligibleTag("default");
             }
 
             // Cache any advanced panel layout we can pull from disk.
@@ -775,16 +777,15 @@ namespace TiltBrush
                 m_AdvancedPanels = false;
                 m_WhiteboardPanels = true;
 
-                // hack
-                App.UserConfig.Brushes.EligibleTags = new[] { "classroom" };
+                _AddEligibleTag("classroom");
+                _RemoveEligibleTag("default");
             }
             else if (m_WhiteboardPanels)
             {
                 m_AdvancedPanels = false;
                 m_WhiteboardPanels = false;
 
-                // hack
-                App.UserConfig.Brushes.EligibleTags = new[] { "default" };
+                _RemoveEligibleTag("default");
             }
             else
             {
@@ -2532,6 +2533,25 @@ namespace TiltBrush
             {
                 m_AllPanels[index].m_Panel.gameObject.SetActive(false);
             }
+        }
+
+        // hack - do not depend on this
+        void _AddEligibleTag(string newTag)
+        {
+            List<string> tagList = new List<string>(App.UserConfig.Brushes.EligibleTags);
+            if (tagList.IndexOf(newTag) == -1)
+            {
+                tagList.Add(newTag);
+                App.UserConfig.Brushes.EligibleTags = tagList.ToArray();
+            }
+        }
+
+        // hack - do not depends on this
+        void _RemoveEligibleTag(string tagToRemove)
+        {
+            List<string> tagList = new List<string>(App.UserConfig.Brushes.EligibleTags);
+            tagList.Remove(tagToRemove);
+            App.UserConfig.Brushes.EligibleTags = tagList.ToArray();
         }
 
         // This method is only used when switching to the app loading state to dismiss panels
