@@ -67,17 +67,17 @@ namespace TiltBrush
             m_ShareButton.SetExtraDescriptionText(text);
         }
 
-        void RefreshButtonsForAdvancedMode()
+        void RefreshButtonsForPanelMode()
         {
             // Settings in basic mode, More... in advanced mode.
             bool advancedMode = PanelManager.m_Instance.AdvancedModeActive();
             bool whiteboardMode = PanelManager.m_Instance.WhiteboardModeActive();
 
-            m_SettingsButton.SetActive(!advancedMode);
-            m_MoreButton.SetActive(advancedMode);
+            m_SettingsButton.SetActive(!advancedMode && !whiteboardMode);
+            m_MoreButton.SetActive(advancedMode || whiteboardMode);
 
-            m_AdvancedModeButton.SetActive(advancedMode);
             m_BeginnerModeButton.SetActive(!advancedMode && !whiteboardMode);
+            m_AdvancedModeButton.SetActive(advancedMode);
             m_WhiteboardModeButton.SetActive(whiteboardMode);
 
             m_Border.gameObject.SetActive(!advancedMode);
@@ -96,7 +96,7 @@ namespace TiltBrush
                 m_AnimButtons[i].renderer.enabled = false;
             }
 
-            RefreshButtonsForAdvancedMode();
+            RefreshButtonsForPanelMode();
             SetShareButtonNotifyActive(false);
 
             UpdateShareButtonText();
@@ -120,7 +120,7 @@ namespace TiltBrush
         override public void ForceUpdatePanelVisuals()
         {
             base.ForceUpdatePanelVisuals();
-            RefreshButtonsForAdvancedMode();
+            RefreshButtonsForPanelMode();
         }
 
         override protected void UpdateGazeBehavior()
