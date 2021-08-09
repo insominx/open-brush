@@ -154,6 +154,10 @@ MonoBehaviour:
     renderer: {fileID: 0}
     baseLocalPos: {x: 0, y: 0, z: 0}
     baseScale: {x: 0, y: 0, z: 0}
+  - button: {fileID: 3497753009121719531}
+    renderer: {fileID: 0}
+    baseLocalPos: {x: 0, y: 0, z: 0}
+    baseScale: {x: 0, y: 0, z: 0}
   m_SaveNewButton: {fileID: 1922662397484504}
   m_SaveOptionsButton: {fileID: 1151082384707834}
   m_SettingsButton: {fileID: 1936268928807740}
