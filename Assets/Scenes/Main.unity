@@ -27378,7 +27378,7 @@ MonoBehaviour:
     m_ModeGvr: 1
     m_Basic: 0
     m_Advanced: 1
-    m_Whiteboard: 0
+    m_Whiteboard: 1
   - m_PanelPrefab: {fileID: 1002243801905128, guid: d544a96827bc4554993b25909f237c88,
       type: 3}
     m_ModeVr: 1
@@ -27462,7 +27462,7 @@ MonoBehaviour:
     m_ModeGvr: 1
     m_Basic: 0
     m_Advanced: 1
-    m_Whiteboard: 0
+    m_Whiteboard: 1
   - m_PanelPrefab: {fileID: 162374, guid: 1cb57c13fa6b529488ff10d4d47cd359, type: 3}
     m_ModeVr: 1
     m_ModeVrExperimental: 1
@@ -27471,7 +27471,7 @@ MonoBehaviour:
     m_ModeGvr: 1
     m_Basic: 0
     m_Advanced: 1
-    m_Whiteboard: 0
+    m_Whiteboard: 1
   - m_PanelPrefab: {fileID: 176644, guid: 898df100b7777cd40b9e51b8df90ddfd, type: 3}
     m_ModeVr: 1
     m_ModeVrExperimental: 1
@@ -27480,7 +27480,7 @@ MonoBehaviour:
     m_ModeGvr: 1
     m_Basic: 0
     m_Advanced: 1
-    m_Whiteboard: 0
+    m_Whiteboard: 1
   - m_PanelPrefab: {fileID: 1770738498669030, guid: 657b9653200e3f64ca3fd359d83c79cf,
       type: 3}
     m_ModeVr: 1
@@ -27490,7 +27490,7 @@ MonoBehaviour:
     m_ModeGvr: 1
     m_Basic: 0
     m_Advanced: 1
-    m_Whiteboard: 0
+    m_Whiteboard: 1
   - m_PanelPrefab: {fileID: 176644, guid: a7d344d3f87214b40adfb90fb5ab01f5, type: 3}
     m_ModeVr: 0
     m_ModeVrExperimental: 0
@@ -27508,7 +27508,7 @@ MonoBehaviour:
     m_ModeGvr: 0
     m_Basic: 0
     m_Advanced: 1
-    m_Whiteboard: 0
+    m_Whiteboard: 1
   - m_PanelPrefab: {fileID: 118774, guid: ccf3c045c4caee34386327d7023b10cf, type: 3}
     m_ModeVr: 0
     m_ModeVrExperimental: 1
@@ -27527,7 +27527,7 @@ MonoBehaviour:
     m_ModeGvr: 0
     m_Basic: 0
     m_Advanced: 1
-    m_Whiteboard: 0
+    m_Whiteboard: 1
   - m_PanelPrefab: {fileID: 1769143079597906, guid: dcbd812f016610942a11d04c69dc3a7c,
       type: 3}
     m_ModeVr: 0
@@ -27557,7 +27557,7 @@ MonoBehaviour:
     m_ModeGvr: 0
     m_Basic: 0
     m_Advanced: 1
-    m_Whiteboard: 0
+    m_Whiteboard: 1
   - m_PanelPrefab: {fileID: 1185791771697282, guid: 757ae00c043360a4bae0ebf6c3ef5254,
       type: 3}
     m_ModeVr: 0
@@ -27567,7 +27567,7 @@ MonoBehaviour:
     m_ModeGvr: 1
     m_Basic: 0
     m_Advanced: 1
-    m_Whiteboard: 0
+    m_Whiteboard: 1
   - m_PanelPrefab: {fileID: 1516143332900224, guid: 0e2763293ad7864469557914ca0129a3,
       type: 3}
     m_ModeVr: 0
@@ -27577,7 +27577,7 @@ MonoBehaviour:
     m_ModeGvr: 1
     m_Basic: 0
     m_Advanced: 1
-    m_Whiteboard: 0
+    m_Whiteboard: 1
   - m_PanelPrefab: {fileID: 199434, guid: da22f81315a0e724887dc7c8b38b71b4, type: 3}
     m_ModeVr: 0
     m_ModeVrExperimental: 0
@@ -27605,7 +27605,7 @@ MonoBehaviour:
     m_ModeGvr: 0
     m_Basic: 0
     m_Advanced: 1
-    m_Whiteboard: 0
+    m_Whiteboard: 1
   - m_PanelPrefab: {fileID: 1284305836696064, guid: a0827a9f569aaf0419944817bf9bbc31,
       type: 3}
     m_ModeVr: 1
