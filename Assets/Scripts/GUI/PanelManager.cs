@@ -785,7 +785,8 @@ namespace TiltBrush
                 m_AdvancedPanels = false;
                 m_WhiteboardPanels = false;
 
-                _RemoveIncludeTag("default");
+                _RemoveIncludeTag("classroom");
+                _AddIncludeTag("default");
             }
             else
             {
