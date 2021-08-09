@@ -321,6 +321,7 @@ namespace TiltBrush
             m_AdvancedModePanel = advanced;
             m_WhiteboardModePanel = whiteboard;
             m_CurrentlyVisibleInAdvancedMode = m_BeginFixed;
+            m_CurrentlyVisibleInWhiteboardMode = m_BeginFixed;
         }
 
         public float PopUpOffset
