@@ -190,26 +190,26 @@ namespace TiltBrush
 
         public Brush[] GetTagFilteredBrushList()
         {
-            string[] eligibleTags = App.UserConfig.Brushes.EligibleTags;
-            string[] exclusionTags = App.UserConfig.Brushes.ExcludeTags ?? Array.Empty<string>();
+            string[] includeTags = App.UserConfig.Brushes.IncludeTags;
+            string[] excludeTags = App.UserConfig.Brushes.ExcludeTags;
 
-            if (eligibleTags == null)
+            if (includeTags == null)
             {
-                Debug.LogError("There will be no brush because none of them are 'eligible'");
+                Debug.LogError("There will be no brush because none of them are tagged 'include'");
             }
 
             // Filter m_GuiBrushList down to those that are both 'eligible' and not 'excluded'
             Brush[] filteredList = m_GuiBrushList.Where((brush) =>
             {
                 // Is this brush excluded?
-                bool? excluded = exclusionTags?.Intersect(brush.m_Tags).Any();
-                if (excluded == true || eligibleTags == null)
+                bool? excluded = excludeTags?.Intersect(brush.m_Tags).Any();
+                if (excluded == true || includeTags == null)
                 {
                     return false;
                 }
 
-                // Is this brush eligible?
-                return eligibleTags.Intersect(brush.m_Tags).Any();
+                // Is this brush included?
+                return includeTags.Intersect(brush.m_Tags).Any();
             }).ToArray();
 
             return filteredList;

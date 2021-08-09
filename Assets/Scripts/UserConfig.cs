@@ -187,25 +187,19 @@ namespace TiltBrush
         [Serializable]
         public struct BrushConfig
         {
-            private string[] eligibleTags;
-            private string[] exclusionTags;
-            public string[] EligibleTags
+            private string[] m_IncludeTags;
+            private string[] m_ExcludeTags;
+
+            public string[] IncludeTags
             {
-                get
-                {
-                    if (eligibleTags == null)
-                    {
-                        eligibleTags = new string[] { "default" };
-                    }
-                    return eligibleTags;
-                }
-                set => eligibleTags = value;
+                get => m_IncludeTags ?? (m_IncludeTags = new string[] { "default" });
+                set => m_IncludeTags = value;
             }
 
             public string[] ExcludeTags
             {
-                get;
-                set;
+                get => m_ExcludeTags ?? (ExcludeTags = Array.Empty<string>());
+                set => m_ExcludeTags = value;
             }
         }
         public BrushConfig Brushes;

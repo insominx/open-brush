@@ -252,7 +252,7 @@ namespace TiltBrush
             int numBrushes = m_TagFilteredBrushes.Length;
 
             // If we have more than 2 pages, set the 2nd page as the starting page
-            int pageStartIndex = (numBrushes > m_BrushButtons.Length * 2) ? 1: 0;
+            int pageStartIndex = (numBrushes > m_BrushButtons.Length * 2) ? 1 : 0;
 
             m_PageIndex = pageStartIndex;
             m_RequestedPageIndex = m_PageIndex;
