@@ -92,7 +92,10 @@ namespace TiltBrush
         void OnColorChanged()
         {
             BasePanel panel = m_Manager.GetPanelForPopUps();
-            if (panel != null)
+
+            // PanelManager can be null if we have more than 1 Backdrop panel which
+            // prematurely triggers the event before we're ready.
+            if (PanelManager.m_Instance != null && panel != null)
             {
                 SetColor(panel.GetGazeColorFromActiveGazePercent());
             }
