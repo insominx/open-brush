@@ -429,8 +429,8 @@ namespace TiltBrush
             // When this tag is present, the brush list will be filtered to the relevant ones
             if (m_WhiteboardPanels)
             {
-                _AddEligibleTag("classroom");
-                _RemoveEligibleTag("default");
+                _AddIncludeTag("classroom");
+                _RemoveIncludeTag("default");
             }
 
             // Cache any advanced panel layout we can pull from disk.
@@ -777,15 +777,15 @@ namespace TiltBrush
                 m_AdvancedPanels = false;
                 m_WhiteboardPanels = true;
 
-                _AddEligibleTag("classroom");
-                _RemoveEligibleTag("default");
+                _AddIncludeTag("classroom");
+                _RemoveIncludeTag("default");
             }
             else if (m_WhiteboardPanels)
             {
                 m_AdvancedPanels = false;
                 m_WhiteboardPanels = false;
 
-                _RemoveEligibleTag("default");
+                _RemoveIncludeTag("default");
             }
             else
             {
@@ -2536,22 +2536,22 @@ namespace TiltBrush
         }
 
         // hack - do not depend on this
-        void _AddEligibleTag(string newTag)
+        void _AddIncludeTag(string newTag)
         {
-            List<string> tagList = new List<string>(App.UserConfig.Brushes.EligibleTags);
+            List<string> tagList = new List<string>(App.UserConfig.Brushes.IncludeTags);
             if (tagList.IndexOf(newTag) == -1)
             {
                 tagList.Add(newTag);
-                App.UserConfig.Brushes.EligibleTags = tagList.ToArray();
+                App.UserConfig.Brushes.IncludeTags = tagList.ToArray();
             }
         }
 
         // hack - do not depends on this
-        void _RemoveEligibleTag(string tagToRemove)
+        void _RemoveIncludeTag(string tagToRemove)
         {
-            List<string> tagList = new List<string>(App.UserConfig.Brushes.EligibleTags);
+            List<string> tagList = new List<string>(App.UserConfig.Brushes.IncludeTags);
             tagList.Remove(tagToRemove);
-            App.UserConfig.Brushes.EligibleTags = tagList.ToArray();
+            App.UserConfig.Brushes.IncludeTags = tagList.ToArray();
         }
 
         // This method is only used when switching to the app loading state to dismiss panels
