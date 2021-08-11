@@ -1,4 +1,4 @@
-﻿// Copyright 2020 The Tilt Brush Authors
+﻿// Copyright 2021 The Open Brush Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ namespace TiltBrush
     public class PlaneStencil : StencilWidget
     {
         private Vector3 m_AspectRatio;
-        private float m_LayeringOffset = 0.1f;
+        private float m_LayeringOffset = -0.1f;
 
         public override Vector3 Extents
         {
