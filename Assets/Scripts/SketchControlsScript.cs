@@ -140,7 +140,11 @@ namespace TiltBrush
             LoadWaitOnDownload,
             SignOutConfirm,
             ReadOnlyNotice,
-            OpenColorOptionsPopup = 7000
+            OpenColorOptionsPopup = 7000,
+            PanelMode = 20100,
+            BeginnerPanelMode = 20110,
+            AdvancedPanelMode = 20120,
+            ClassroomPanelMode = 20130
         }
 
         public enum ControlsType
@@ -4597,43 +4601,9 @@ namespace TiltBrush
                         EatToolScaleInput();
                         break;
                     }
+                case GlobalCommands.BeginnerPanelMode:
                 case GlobalCommands.AdvancedPanelsToggle:
-                    m_PanelManager.TogglePanelMode();
-
-                    bool nowInBeginnerMode = !m_PanelManager.AdvancedModeActive() && !m_PanelManager.WhiteboardModeActive();
-                    bool nowInAdvancedMode = m_PanelManager.AdvancedModeActive();
-                    bool nowInWhiteboardMode = m_PanelManager.WhiteboardModeActive();
-
-                    Debug.Log($"beginner: ({nowInBeginnerMode}), advanced: ({nowInAdvancedMode}), whiteboard: ({nowInWhiteboardMode})");
-
-                    // If we're now in basic mode, ensure we don't have advanced abilities.
-                    if (nowInBeginnerMode)
-                    {
-                        m_WidgetManager.StencilsDisabled = true;
-                        m_WidgetManager.CameraPathsVisible = false;
-                        App.Switchboard.TriggerStencilModeChanged();
-                        m_SketchSurfacePanel.EnsureUserHasBasicToolEnabled();
-                        if (PointerManager.m_Instance.CurrentSymmetryMode != SymmetryMode.None)
-                        {
-                            PointerManager.m_Instance.SetSymmetryMode(SymmetryMode.None, false);
-                        }
-                    }
-                    else if (nowInAdvancedMode)
-                    {
-                        // m_WidgetManager.CameraPathsVisible = true;
-                    }
-                    else if (nowInWhiteboardMode)
-                    {
-                        m_WidgetManager.StencilsDisabled = true;
-                        m_WidgetManager.CameraPathsVisible = false;
-                        // m_SketchSurfacePanel.EnsureUserHasBasicToolEnabled();
-                        if (PointerManager.m_Instance.CurrentSymmetryMode != SymmetryMode.None)
-                        {
-                            PointerManager.m_Instance.SetSymmetryMode(SymmetryMode.None, false);
-                        }
-                    }
-                    PromoManager.m_Instance.RecordCompletion(PromoType.AdvancedPanels);
-                    EatGazeObjectInput();
+                    ChangePanelMode();
                     break;
                 case GlobalCommands.Music: break; // Intentionally blank.
                 case GlobalCommands.ToggleGroupStrokesAndWidgets:
@@ -5058,6 +5028,47 @@ namespace TiltBrush
         public void OpenPanelOfType(BasePanel.PanelType type, TrTransform trSpawnXf)
         {
             m_PanelManager.OpenPanel(type, trSpawnXf);
+            EatGazeObjectInput();
+        }
+
+        public void ChangePanelMode()
+        {
+            m_PanelManager.TogglePanelMode();
+
+            bool nowInBeginnerMode = !m_PanelManager.AdvancedModeActive() && !m_PanelManager.WhiteboardModeActive();
+            bool nowInAdvancedMode = m_PanelManager.AdvancedModeActive();
+            bool nowInWhiteboardMode = m_PanelManager.WhiteboardModeActive();
+
+            Debug.Log($"beginner: ({nowInBeginnerMode}), advanced: ({nowInAdvancedMode}), whiteboard: ({nowInWhiteboardMode})");
+
+            // If we're now in basic mode, ensure we don't have advanced abilities.
+            if (nowInBeginnerMode)
+            {
+                m_WidgetManager.StencilsDisabled = true;
+                m_WidgetManager.CameraPathsVisible = false;
+                App.Switchboard.TriggerStencilModeChanged();
+                m_SketchSurfacePanel.EnsureUserHasBasicToolEnabled();
+                if (PointerManager.m_Instance.CurrentSymmetryMode != SymmetryMode.None)
+                {
+                    PointerManager.m_Instance.SetSymmetryMode(SymmetryMode.None, false);
+                }
+            }
+            else if (nowInAdvancedMode)
+            {
+                // m_WidgetManager.CameraPathsVisible = true;
+            }
+            else if (nowInWhiteboardMode)
+            {
+                m_WidgetManager.StencilsDisabled = true;
+                m_WidgetManager.CameraPathsVisible = false;
+                // m_SketchSurfacePanel.EnsureUserHasBasicToolEnabled();
+                if (PointerManager.m_Instance.CurrentSymmetryMode != SymmetryMode.None)
+                {
+                    PointerManager.m_Instance.SetSymmetryMode(SymmetryMode.None, false);
+                }
+            }
+
+            PromoManager.m_Instance.RecordCompletion(PromoType.AdvancedPanels);
             EatGazeObjectInput();
         }
 

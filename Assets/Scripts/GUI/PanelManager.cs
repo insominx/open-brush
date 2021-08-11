@@ -14,9 +14,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Profiling;
+using Debug = UnityEngine.Debug;
 namespace TiltBrush
 {
 
@@ -184,6 +186,11 @@ namespace TiltBrush
             MemoryWarningToStandard,
         }
 
+        public enum PanelLayout
+        {
+            Beginner = 0, Advanced = 1, Classroom = 2
+        }
+
         public enum PaneVisualsState
         {
             Hidden,
@@ -277,6 +284,7 @@ namespace TiltBrush
 
         private PanelsState m_PanelsState;
         private PanelMode m_PanelsMode;
+        private PanelLayout m_PanelLayout;
 
         private GameObject m_UxExploration;
 
@@ -425,9 +433,11 @@ namespace TiltBrush
             m_AdvancedPanels = modeValue == 1;
             m_WhiteboardPanels = modeValue == 2;
 
+            m_PanelLayout = (PanelLayout)modeValue;
+
             // hack, add classroom to the list if it isn't already there
             // When this tag is present, the brush list will be filtered to the relevant ones
-            if (m_WhiteboardPanels)
+            if (m_WhiteboardPanels || m_PanelLayout == PanelLayout.Classroom)
             {
                 _AddIncludeTag("classroom");
                 _RemoveIncludeTag("default");
@@ -772,7 +782,15 @@ namespace TiltBrush
 
         public void TogglePanelMode()
         {
-            if (m_AdvancedPanels)
+            int numberOfLayouts = 3;
+            int currentLayout = (int)m_PanelLayout;
+            PanelLayout newLayout = (PanelLayout)((currentLayout + 1) % numberOfLayouts);
+            SwitchPanelLayout(newLayout);
+        }
+
+        private void SwitchPanelLayout(PanelLayout newMode)
+        {
+            if (newMode == PanelLayout.Classroom)
             {
                 m_AdvancedPanels = false;
                 m_WhiteboardPanels = true;
@@ -780,7 +798,7 @@ namespace TiltBrush
                 _AddIncludeTag("classroom");
                 _RemoveIncludeTag("default");
             }
-            else if (m_WhiteboardPanels)
+            else if (newMode == PanelLayout.Beginner)
             {
                 m_AdvancedPanels = false;
                 m_WhiteboardPanels = false;
@@ -788,10 +806,14 @@ namespace TiltBrush
                 _RemoveIncludeTag("classroom");
                 _AddIncludeTag("default");
             }
-            else
+            else if (newMode == PanelLayout.Advanced)
             {
                 m_AdvancedPanels = true;
                 m_WhiteboardPanels = false;
+            }
+            else
+            {
+                Debug.LogError("Trying to switch to unknown panel layout");
             }
 
             // If we've been in advanced panels before, just spin around once.
