@@ -1,4 +1,4 @@
-﻿// Copyright 2020 The Tilt Brush Authors
+﻿// Copyright 2021 The Open Brush Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -46,7 +46,7 @@ namespace TiltBrush
         // will be notified here so that we can update the slider visuals
         private void OnStencilAttractDistChanged()
         {
-            if (WidgetManager.m_Instance)
+            if (WidgetManager.m_Instance != null)
             {
                 float value = WidgetManager.m_Instance.StencilAttractDist;
                 float range = m_MaxAttractDistance - m_MinAttractDistance;

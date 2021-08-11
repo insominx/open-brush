@@ -25,6 +25,8 @@ namespace TiltBrush
     public class PlaneStencil : StencilWidget
     {
         private Vector3 m_AspectRatio;
+
+        // This must be negative for brush strokes to layer on top (rather than below)
         private float m_LayeringOffset = -0.1f;
 
         public override Vector3 Extents
