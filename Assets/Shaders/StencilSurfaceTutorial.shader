@@ -20,7 +20,7 @@ Properties {
   _GridSize ("Grid Size", Float) = 1
   _GridWidth ("Grid Width", Float) = .05
   _UVGridWidth ("UV Grid Width", Float) = .1
-  [KeywordEnum(Cube, Sphere, Capsule)] _Shape ("Shape Type", Float) = 0
+  [KeywordEnum(Plane, Cube, Sphere, Capsule)] _Shape ("Shape Type", Float) = 0
 
 }
 
@@ -28,7 +28,7 @@ CGINCLUDE
   #include "UnityCG.cginc"
   #include "Assets/Shaders/Include/Brush.cginc"
 
-  #pragma multi_compile _SHAPE_CUBE _SHAPE_SPHERE _SHAPE_CAPSULE
+  #pragma multi_compile _SHAPE_PLANE _SHAPE_CUBE _SHAPE_SPHERE _SHAPE_CAPSULE
 
   uniform float4 _Color;
   uniform float4 _BackColor;
@@ -98,7 +98,14 @@ CGINCLUDE
     // Edges along the border of the cube, capsule or sphere
     float outerEdges = 0;
 
-#if _SHAPE_CUBE
+#if _SHAPE_PLANE
+    float gridWidthX = _UVGridWidth / _LocalScale.x;
+    float gridWidthY = _UVGridWidth / _LocalScale.y;
+
+    // front / back
+    outerEdges += facingZ * abs(.5 - i.texcoord.x) >  (.5 - gridWidthX) ;
+    outerEdges += facingZ * abs(.5 - i.texcoord.y) >  (.5 - gridWidthY) ;
+#elif _SHAPE_CUBE
     float gridWidthX = _UVGridWidth / _LocalScale.x;
     float gridWidthY = _UVGridWidth / _LocalScale.y;
     float gridWidthZ = _UVGridWidth / _LocalScale.z;

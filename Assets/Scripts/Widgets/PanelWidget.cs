@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using UnityEngine;
 using System.Linq;
 
@@ -154,12 +155,21 @@ namespace TiltBrush
                 return -1.0f;
             }
 
-            // If this panel is fixed and facing away from the user, don't allow it to be grabbed.
-            if (m_PanelSibling.m_Fixed &&
-                Vector3.Angle(transform.forward, ViewpointScript.Gaze.direction) >
-                m_GrabFixedMaxFacingAngle)
+            try
             {
-                return -1.0f;
+                // If this panel is fixed and facing away from the user, don't allow it to be grabbed.
+                if (m_PanelSibling.m_Fixed &&
+                    Vector3.Angle(transform.forward, ViewpointScript.Gaze.direction) >
+                    m_GrabFixedMaxFacingAngle)
+                {
+                    return -1.0f;
+                }
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
             }
             return base.GetActivationScore(vControllerPos, name);
         }

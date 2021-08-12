@@ -104,7 +104,8 @@ namespace TiltBrush
             ReferenceMobile,
             CameraPath,
             BrushLab,
-            Whiteboard = 20000
+            Whiteboard = 20000,
+            StencilSettings = 20200
         }
 
         private enum FixedTransitionState

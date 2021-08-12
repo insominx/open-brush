@@ -192,6 +192,7 @@ Custom/AnimalRuler,
 Unlit/Texture,
 Custom/StencilSurface,_SHAPE_CAPSULE
 Custom/StencilSurface,_SHAPE_CUBE
+Custom/StencilSurface,_SHAPE_PLANE
 Custom/StencilSurface,_SHAPE_SPHERE
 Custom/ProgressBar,_EMISSION
 Custom/Standard_AudioReactive,_EMISSION,_LIGHTMAPPING_REALTIME
