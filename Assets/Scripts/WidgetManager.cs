@@ -178,6 +178,13 @@ namespace TiltBrush
 
         static private Dictionary<ushort, GrabWidget> sm_BatchMap = new Dictionary<ushort, GrabWidget>();
 
+
+        void Update()
+        {
+            // Debug.Log(m_ActiveStencil);
+            // Shader.SetGlobalFloat("_GlobalGridSizeMultiplier", 1f + (float)Math.Sin(Time.time));
+        }
+
         public StencilWidget ActiveStencil
         {
             get { return m_ActiveStencil; }

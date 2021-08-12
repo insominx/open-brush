@@ -469,7 +469,6 @@ Transform:
   - {fileID: 4000011007410470}
   - {fileID: 498528}
   - {fileID: 499980}
-  - {fileID: 2565831283473496364}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -613,7 +612,7 @@ Transform:
   - {fileID: 4304915440408156}
   - {fileID: 4873075393245800}
   m_Father: {fileID: 499980}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 90}
 --- !u!1 &169614
 GameObject:
@@ -644,7 +643,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 499980}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &6569620
 BoxCollider:
@@ -732,7 +731,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 499980}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3378504
 MeshFilter:
@@ -912,7 +911,7 @@ Transform:
   m_LocalScale: {x: 0.5155078, y: 0.1875, z: 1.25}
   m_Children: []
   m_Father: {fileID: 499980}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3325472
 MeshFilter:
@@ -1041,6 +1040,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4197450359471226742}
+  - {fileID: 2565831283473496364}
   - {fileID: 4210165000005696}
   - {fileID: 483542}
   - {fileID: 435558}
@@ -1090,7 +1090,7 @@ Transform:
   - {fileID: 408892}
   - {fileID: 459328}
   m_Father: {fileID: 499980}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &114545032564704786
 MonoBehaviour:
@@ -1891,7 +1891,7 @@ Transform:
   m_Children:
   - {fileID: 466386}
   m_Father: {fileID: 499980}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &33710528817102334
 MeshFilter:
@@ -2026,7 +2026,7 @@ Transform:
   - {fileID: 4153922631777284}
   - {fileID: 4402564000880478}
   m_Father: {fileID: 499980}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &33802401890004714
 MeshFilter:
@@ -2914,9 +2914,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4210165000005696}
-  - component: {fileID: 11456774}
+  - component: {fileID: 2910217708995119139}
   m_Layer: 16
-  m_Name: Slider_Quality
+  m_Name: Slider_GridSize
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2941,9 +2941,9 @@ Transform:
   - {fileID: 4299678740381122}
   - {fileID: 4560776758722994}
   m_Father: {fileID: 499980}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &11456774
+--- !u!114 &2910217708995119139
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2952,17 +2952,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 1643962623586248}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 881e7516cf461dd489ad58ea7f1f673d, type: 3}
+  m_Script: {fileID: 11500000, guid: 6e5554350d0eee245a1d76d1f483740f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_DescriptionType: 1
   m_DescriptionYOffset: 0
-  m_DescriptionText: Visual Quality
+  m_DescriptionText: Guide Grid Size
   m_DescriptionTextExtra: 
   m_DescriptionActivateSpeed: 12
   m_DescriptionZScale: 10
   m_Nob: {fileID: 1580425292155564}
   m_Mesh: {fileID: 23664233917765338}
+  m_MinGridSize: 0.25
+  m_MaxGridSize: 3
 --- !u!1 &1708667053712832
 GameObject:
   m_ObjectHideFlags: 0
@@ -3380,7 +3382,7 @@ Transform:
   - {fileID: 4887086521611946}
   - {fileID: 4148024965627128}
   m_Father: {fileID: 499980}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1889327720883680
 GameObject:
@@ -3587,7 +3589,7 @@ Transform:
   - {fileID: 4593170763591158}
   - {fileID: 4626606552859720}
   m_Father: {fileID: 499980}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 90}
 --- !u!114 &11452056
 MonoBehaviour:
@@ -4212,7 +4214,7 @@ GameObject:
   - component: {fileID: 2565831283473496364}
   - component: {fileID: 6085390432680882802}
   m_Layer: 16
-  m_Name: PointerSnapSlider
+  m_Name: Slider_AttractDist
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4226,7 +4228,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7287255001090165708}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.45, z: -0.03}
+  m_LocalPosition: {x: 0, y: 0.4499998, z: -0.03}
   m_LocalScale: {x: 2.5, y: 2.5, z: 2.5}
   m_Children:
   - {fileID: 8394645099148438370}
@@ -4236,8 +4238,8 @@ Transform:
   - {fileID: 8367251511759711437}
   - {fileID: 2877079263195361027}
   - {fileID: 1612498515896567848}
-  m_Father: {fileID: 415082}
-  m_RootOrder: 3
+  m_Father: {fileID: 499980}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6085390432680882802
 MonoBehaviour:
@@ -4256,7 +4258,7 @@ MonoBehaviour:
   m_DescriptionText: Snap Distance
   m_DescriptionTextExtra: 
   m_DescriptionActivateSpeed: 12
-  m_DescriptionZScale: 25
+  m_DescriptionZScale: 10
   m_Nob: {fileID: 1479591078748344970}
   m_Mesh: {fileID: 9178696958901958908}
   m_MinAttractDistance: 0.25

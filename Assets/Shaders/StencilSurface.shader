@@ -37,6 +37,7 @@ CGINCLUDE
   uniform float4 _BackColor;
   uniform float3 _LocalScale;
   uniform float _GridSize;
+  uniform float _GlobalGridSizeMultiplier;
   uniform float _GridWidth;
   uniform float _UVGridWidth;
   uniform float _ModeSwitch;
@@ -95,7 +96,7 @@ CGINCLUDE
     else if (sceneScale > .25) gridMultiplier = 8;
     else gridMultiplier = 16;
 
-    _GridSize *= gridMultiplier * gridSizeMultiplier;
+    _GridSize *= gridMultiplier * gridSizeMultiplier * _GlobalGridSizeMultiplier;
     _GridWidth *= gridMultiplier * gridWidthMultiplier;
     _UVGridWidth *= gridMultiplier * UVGridWidthMultiplier;
 

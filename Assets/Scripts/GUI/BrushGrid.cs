@@ -236,8 +236,6 @@ namespace TiltBrush
             int numBrushes = m_TagFilteredBrushes.Length;
             m_NumPages = ((numBrushes - 1) / m_BrushButtons.Length) + 1;
 
-            Debug.Log($"num pages {m_NumPages}");
-
             float pages = (float)m_NumPages;
             ControllerMaterialCatalog.m_Instance.BrushPage.SetFloat("_UsedIconCount", pages);
             ControllerMaterialCatalog.m_Instance.BrushPageActive.SetFloat("_UsedIconCount", pages);
