@@ -36,12 +36,10 @@ namespace TiltBrush
         [SerializeField] OptionButton m_ShareButton;
         [SerializeField] OptionButton m_ShareButton_Notify;
         [SerializeField] GameObject m_AdvancedModeBorder;
-        [SerializeField] GameObject m_BeginnerModeButton;
-        [SerializeField] GameObject m_AdvancedModeButton;
-        [SerializeField] GameObject m_WhiteboardModeButton;
         [SerializeField] GameObject m_ButtonRotationContainer;
         [SerializeField] GameObject m_MemoryWarning;
         [SerializeField] GameObject m_MemoryWarningButton;
+        [SerializeField] GameObject m_PanelLayoutsButton;
         [SerializeField] Color m_MemoryWarningColor;
         [SerializeField] float m_ButtonRotationAngle = 45f;
 
@@ -53,7 +51,7 @@ namespace TiltBrush
         private Vector3 m_MemoryWarningBaseScale;
 
         public Transform ShareButton { get { return m_ShareButton.transform; } }
-        public Transform AdvancedButton { get { return m_AdvancedModeButton.transform; } }
+        public Transform PanelLayoutsButton { get { return m_PanelLayoutsButton.transform; } }
         public HintObjectScript AdvancedModeHintObject { get { return m_AdvancedModeHintObject; } }
 
         void UpdateShareButtonText()
@@ -70,18 +68,13 @@ namespace TiltBrush
         void RefreshButtonsForPanelMode()
         {
             // Settings in basic mode, More... in advanced mode.
-            bool advancedMode = PanelManager.m_Instance.AdvancedModeActive();
-            bool whiteboardMode = PanelManager.m_Instance.WhiteboardModeActive();
+            PanelManager.PanelLayout layout = PanelManager.m_Instance.CurrentPanelLayout();
 
-            m_SettingsButton.SetActive(!advancedMode && !whiteboardMode);
-            m_MoreButton.SetActive(advancedMode || whiteboardMode);
+            m_SettingsButton.SetActive(layout == PanelManager.PanelLayout.Beginner);
+            m_MoreButton.SetActive(layout != PanelManager.PanelLayout.Beginner);
 
-            m_BeginnerModeButton.SetActive(!advancedMode && !whiteboardMode);
-            m_AdvancedModeButton.SetActive(advancedMode);
-            m_WhiteboardModeButton.SetActive(whiteboardMode);
-
-            m_Border.gameObject.SetActive(!advancedMode);
-            m_AdvancedModeBorder.SetActive(advancedMode);
+            m_Border.gameObject.SetActive(layout == PanelManager.PanelLayout.Beginner);
+            m_AdvancedModeBorder.SetActive(layout != PanelManager.PanelLayout.Beginner);
         }
 
         override public void InitPanel()

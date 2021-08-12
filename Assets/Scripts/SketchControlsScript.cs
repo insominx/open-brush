@@ -141,10 +141,10 @@ namespace TiltBrush
             SignOutConfirm,
             ReadOnlyNotice,
             OpenColorOptionsPopup = 7000,
-            PanelMode = 20100,
-            BeginnerPanelMode = 20110,
-            AdvancedPanelMode = 20120,
-            ClassroomPanelMode = 20130
+            PanelLayout = 20100,
+            BeginnerPanelLayout = 20110,
+            AdvancedPanelLayout = 20120,
+            ClassroomPanelLayout = 20130
         }
 
         public enum ControlsType
@@ -1199,7 +1199,7 @@ namespace TiltBrush
         bool CanUsePinCushion()
         {
             return (m_ControlsType == ControlsType.SixDofControllers) &&
-                m_PanelManager.AdvancedModeActive() &&
+                m_PanelManager.AdvancedLayoutActive() &&
                 !InputManager.m_Instance.GetCommand(InputManager.SketchCommands.Activate) &&
                 !InputManager.Brush.GetControllerGrip() &&
                 !InputManager.Wand.GetControllerGrip() &&
@@ -1504,7 +1504,7 @@ namespace TiltBrush
             bool hasController = m_ControlsType == ControlsType.SixDofControllers;
 
             // Toggle default tool.
-            if (!m_PanelManager.AdvancedModeActive() &&
+            if (!m_PanelManager.AdvancedLayoutActive() &&
                 InputManager.m_Instance.GetCommandDown(InputManager.SketchCommands.ToggleDefaultTool) &&
                 !m_SketchSurfacePanel.IsDefaultToolEnabled() &&
                 m_SketchSurfacePanel.ActiveTool.AllowDefaultToolToggle() &&
@@ -4601,9 +4601,17 @@ namespace TiltBrush
                         EatToolScaleInput();
                         break;
                     }
-                case GlobalCommands.BeginnerPanelMode:
+                case GlobalCommands.BeginnerPanelLayout:
+                    ChangePanelLayout(PanelManager.PanelLayout.Beginner);
+                    break;
+                case GlobalCommands.AdvancedPanelLayout:
+                    ChangePanelLayout(PanelManager.PanelLayout.Advanced);
+                    break;
+                case GlobalCommands.ClassroomPanelLayout:
+                    ChangePanelLayout(PanelManager.PanelLayout.Classroom);
+                    break;
                 case GlobalCommands.AdvancedPanelsToggle:
-                    ChangePanelMode();
+                    TogglePanelLayout();
                     break;
                 case GlobalCommands.Music: break; // Intentionally blank.
                 case GlobalCommands.ToggleGroupStrokesAndWidgets:
@@ -4849,7 +4857,7 @@ namespace TiltBrush
                 case GlobalCommands.SymmetryFour: return PointerManager.m_Instance.CurrentSymmetryMode == SymmetryMode.FourAroundY;
                 case GlobalCommands.AutoOrient: return m_AutoOrientAfterRotation;
                 case GlobalCommands.AudioVisualization: return VisualizerManager.m_Instance.VisualsRequested;
-                case GlobalCommands.AdvancedPanelsToggle: return m_PanelManager.AdvancedModeActive();
+                case GlobalCommands.AdvancedPanelsToggle: return m_PanelManager.AdvancedLayoutActive();
                 case GlobalCommands.Music: return VisualizerManager.m_Instance.VisualsRequested;
                 case GlobalCommands.DropCam: return m_DropCam.gameObject.activeSelf;
                 case GlobalCommands.ToggleAutosimplification: return QualityControls.AutosimplifyEnabled;
@@ -5031,18 +5039,22 @@ namespace TiltBrush
             EatGazeObjectInput();
         }
 
-        public void ChangePanelMode()
+        private void ChangePanelLayout(PanelManager.PanelLayout newLayout)
         {
-            m_PanelManager.TogglePanelMode();
+            m_PanelManager.ChangePanelLayout(newLayout);
+            OnPanelLayoutChanged();
+        }
 
-            bool nowInBeginnerMode = !m_PanelManager.AdvancedModeActive() && !m_PanelManager.WhiteboardModeActive();
-            bool nowInAdvancedMode = m_PanelManager.AdvancedModeActive();
-            bool nowInWhiteboardMode = m_PanelManager.WhiteboardModeActive();
+        private void TogglePanelLayout()
+        {
+            m_PanelManager.TogglePanelLayout();
+            OnPanelLayoutChanged();
+        }
 
-            Debug.Log($"beginner: ({nowInBeginnerMode}), advanced: ({nowInAdvancedMode}), whiteboard: ({nowInWhiteboardMode})");
-
+        private void OnPanelLayoutChanged()
+        {
             // If we're now in basic mode, ensure we don't have advanced abilities.
-            if (nowInBeginnerMode)
+            if (m_PanelManager.CurrentPanelLayout() == PanelManager.PanelLayout.Beginner)
             {
                 m_WidgetManager.StencilsDisabled = true;
                 m_WidgetManager.CameraPathsVisible = false;
@@ -5053,15 +5065,15 @@ namespace TiltBrush
                     PointerManager.m_Instance.SetSymmetryMode(SymmetryMode.None, false);
                 }
             }
-            else if (nowInAdvancedMode)
+            else if (m_PanelManager.CurrentPanelLayout() == PanelManager.PanelLayout.Advanced)
             {
-                // m_WidgetManager.CameraPathsVisible = true;
+                m_WidgetManager.StencilsDisabled = false;
+                m_WidgetManager.CameraPathsVisible = true;
             }
-            else if (nowInWhiteboardMode)
+            else if (m_PanelManager.CurrentPanelLayout() == PanelManager.PanelLayout.Classroom)
             {
                 m_WidgetManager.StencilsDisabled = true;
                 m_WidgetManager.CameraPathsVisible = false;
-                // m_SketchSurfacePanel.EnsureUserHasBasicToolEnabled();
                 if (PointerManager.m_Instance.CurrentSymmetryMode != SymmetryMode.None)
                 {
                     PointerManager.m_Instance.SetSymmetryMode(SymmetryMode.None, false);

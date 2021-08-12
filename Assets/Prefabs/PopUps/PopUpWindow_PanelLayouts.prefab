@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 114088985262948820}
   - component: {fileID: 6564990}
   m_Layer: 16
-  m_Name: Classroom Mode
+  m_Name: Classroom Layout
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -109,7 +109,7 @@ MonoBehaviour:
   m_HoverScale: 1.1
   m_HoverBoxColliderGrow: 0.2
   m_AddOverlay: 0
-  m_Command: 52
+  m_Command: 20130
   m_CommandParam: -1
   m_CommandParam2: -1
   m_RequiresPopup: 0
@@ -146,7 +146,7 @@ GameObject:
   - component: {fileID: 11477574}
   - component: {fileID: 114378360279916084}
   m_Layer: 16
-  m_Name: PopUpWindow_PanelMode
+  m_Name: PopUpWindow_PanelLayouts
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -692,7 +692,7 @@ GameObject:
   - component: {fileID: 7852222321032608173}
   - component: {fileID: 5949048692141387911}
   m_Layer: 16
-  m_Name: Beginner Mode
+  m_Name: Beginner Layout
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -773,7 +773,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_DescriptionType: 0
   m_DescriptionYOffset: 0
-  m_DescriptionText: Classroom
+  m_DescriptionText: Beginner
   m_DescriptionTextExtra: 
   m_DescriptionActivateSpeed: 12
   m_DescriptionZScale: 1
@@ -825,7 +825,7 @@ GameObject:
   - component: {fileID: 7877489256737959296}
   - component: {fileID: 1124158558578438566}
   m_Layer: 16
-  m_Name: Advanced Mode
+  m_Name: Advanced Layout
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -906,7 +906,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_DescriptionType: 0
   m_DescriptionYOffset: 0
-  m_DescriptionText: Classroom
+  m_DescriptionText: Advanced
   m_DescriptionTextExtra: 
   m_DescriptionActivateSpeed: 12
   m_DescriptionZScale: 1
@@ -920,7 +920,7 @@ MonoBehaviour:
   m_HoverScale: 1.1
   m_HoverBoxColliderGrow: 0.2
   m_AddOverlay: 0
-  m_Command: 52
+  m_Command: 20120
   m_CommandParam: -1
   m_CommandParam2: -1
   m_RequiresPopup: 0

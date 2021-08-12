@@ -44,7 +44,7 @@ namespace TiltBrush
                 4, 0.15f, 0.1f);
 
             // Parent and position the button highlight to our target button.
-            PromoManager.m_Instance.ButtonHighlight.transform.parent = adminPanel.AdvancedButton;
+            PromoManager.m_Instance.ButtonHighlight.transform.parent = adminPanel.PanelLayoutsButton;
             PromoManager.m_Instance.ResetButtonHighlightXf();
             PromoManager.m_Instance.ButtonHighlight.SetActive(true);
 
@@ -61,7 +61,7 @@ namespace TiltBrush
         public override void OnActive()
         {
             // If we made it to advanced mode, we should be gone.
-            if (PanelManager.m_Instance.AdvancedModeActive())
+            if (PanelManager.m_Instance.AdvancedLayoutActive())
             {
                 m_Request = RequestingState.ToHide;
                 m_CustomHintObject.Activate(false);

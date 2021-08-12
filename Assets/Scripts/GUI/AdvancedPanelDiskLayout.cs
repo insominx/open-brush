@@ -114,7 +114,7 @@ namespace TiltBrush
                 PanelManager.PanelData p = panels[i];
 
                 // Only record the positions of non-unique, advanced panels that are showing.
-                bool advancedNonUniquePanelShowing = p.m_Panel.AdvancedModePanel &&
+                bool advancedNonUniquePanelShowing = p.m_Panel.AdvancedLayoutPanel &&
                     !PanelManager.m_Instance.IsPanelUnique(p.m_Panel.Type) && p.m_Widget.Showing;
                 // But don't record the positions of those that are not core and floating.
                 bool coreOrFixed = PanelManager.m_Instance.IsPanelCore(p.m_Panel.Type) ||

@@ -269,8 +269,8 @@ namespace TiltBrush
         private GameObject m_TempPopUpCollider;
         private float m_PopUpGazeTimer;
 
-        private bool m_AdvancedModePanel;
-        private bool m_WhiteboardModePanel;
+        private bool m_AdvancedLayoutPanel;
+        private bool m_WhiteboardLayoutPanel;
         private bool m_CurrentlyVisibleInAdvancedMode;
         private bool m_CurrentlyVisibleInWhiteboardMode;
 
@@ -295,10 +295,10 @@ namespace TiltBrush
                 m_WandAttachAngle == m_WandAttachAngle_Initial;
         }
         public PanelWidget WidgetSibling { get { return m_WidgetSibling; } }
-        public bool AdvancedModePanel { get { return m_AdvancedModePanel; } }
-        public bool WhiteboardModePanel { get { return m_WhiteboardModePanel; } }
+        public bool AdvancedLayoutPanel { get { return m_AdvancedLayoutPanel; } }
+        public bool WhiteboardModePanel { get { return m_WhiteboardLayoutPanel; } }
         public bool CurrentlyVisibleInAdvancedMode { get { return m_CurrentlyVisibleInAdvancedMode; } }
-        public bool CurrentlyVisibleInWhiteboardMode { get { return m_CurrentlyVisibleInAdvancedMode; } }
+        public bool CurrentlyVisibleInWhiteboardMode { get { return m_CurrentlyVisibleInWhiteboardMode; } }
         public Vector3 ParticleBounds { get { return m_ParticleBounds; } }
         public PopUpWindow PanelPopUp { get { return m_ActivePopUp; } }
 
@@ -318,8 +318,8 @@ namespace TiltBrush
 
         public void InitModeFlag(bool advanced, bool whiteboard)
         {
-            m_AdvancedModePanel = advanced;
-            m_WhiteboardModePanel = whiteboard;
+            m_AdvancedLayoutPanel = advanced;
+            m_WhiteboardLayoutPanel = whiteboard;
             m_CurrentlyVisibleInAdvancedMode = m_BeginFixed;
             m_CurrentlyVisibleInWhiteboardMode = m_BeginFixed;
         }
@@ -606,7 +606,7 @@ namespace TiltBrush
                 m_TransitionState = FixedTransitionState.Fixed;
             }
 
-            bool advancedOrWhiteboard = m_AdvancedModePanel || m_WhiteboardModePanel;
+            bool advancedOrWhiteboard = m_AdvancedLayoutPanel || m_WhiteboardLayoutPanel;
 
             // Bake border meshs.
             float width = !advancedOrWhiteboard ? m_BorderMeshAdvWidth : m_BorderMeshWidth;
@@ -723,7 +723,7 @@ namespace TiltBrush
         {
             if (PanelManager.m_Instance != null)
             {
-                if (PanelManager.m_Instance.AdvancedModeActive())
+                if (PanelManager.m_Instance.AdvancedLayoutActive())
                 {
                     m_CurrentlyVisibleInAdvancedMode = true;
                 }
@@ -734,7 +734,7 @@ namespace TiltBrush
         {
             if (PanelManager.m_Instance != null)
             {
-                if (PanelManager.m_Instance.AdvancedModeActive())
+                if (PanelManager.m_Instance.AdvancedLayoutActive())
                 {
                     m_CurrentlyVisibleInAdvancedMode = false;
                 }

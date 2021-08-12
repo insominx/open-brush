@@ -240,9 +240,9 @@ namespace TiltBrush
                 get
                 {
                     bool isAdmin = m_Instance.IsAdminPanel(m_Panel.Type);
-                    bool beginner = m_Instance.BeginnerModeActive() && !m_Panel.AdvancedModePanel && !m_Panel.WhiteboardModePanel;
-                    bool advanced = m_Instance.AdvancedModeActive() && m_Panel.AdvancedModePanel;
-                    bool whiteboard = m_Instance.WhiteboardModeActive() && m_Panel.WhiteboardModePanel;
+                    bool beginner = m_Instance.BeginnerLayoutActive() && !m_Panel.AdvancedLayoutPanel && !m_Panel.WhiteboardModePanel;
+                    bool advanced = m_Instance.AdvancedLayoutActive() && m_Panel.AdvancedLayoutPanel;
+                    bool whiteboard = m_Instance.WhiteboardLayoutActive() && m_Panel.WhiteboardModePanel;
                     // Admin panel is always available.
                     return isAdmin || beginner || advanced || whiteboard;
                 }
@@ -293,8 +293,6 @@ namespace TiltBrush
 
         private bool m_IntroSketchbookMode;
         private bool m_FirstSketchLoad = true;
-        private bool m_AdvancedPanels;
-        private bool m_WhiteboardPanels;
 
         public Color PanelHighlightActiveColor
         {
@@ -331,9 +329,10 @@ namespace TiltBrush
         public bool MemoryWarningActive() { return m_PanelsMode == PanelMode.MemoryWarning; }
         public bool BrushLabActive() { return m_PanelsMode == PanelMode.BrushLab; }
         public bool PanelsHaveBeenCustomized() { return m_PanelsCustomized; }
-        public bool BeginnerModeActive() { return !m_AdvancedPanels && !m_WhiteboardPanels; }
-        public bool AdvancedModeActive() { return m_AdvancedPanels; }
-        public bool WhiteboardModeActive() { return m_WhiteboardPanels; }
+        public bool BeginnerLayoutActive() { return m_PanelLayout == PanelLayout.Beginner; }
+        public bool AdvancedLayoutActive() { return m_PanelLayout == PanelLayout.Advanced; }
+        public bool WhiteboardLayoutActive() { return m_PanelLayout == PanelLayout.Classroom; }
+        public PanelLayout CurrentPanelLayout() { return m_PanelLayout; }
         public bool SketchbookActiveIncludingTransitions()
         {
             return SketchbookActive() || m_PanelsMode == PanelMode.StandardToSketchbook;
@@ -430,14 +429,11 @@ namespace TiltBrush
 
             // Start off in whiteboard mode
             int modeValue = PlayerPrefs.GetInt(kPlayerPrefAdvancedMode, 2);
-            m_AdvancedPanels = modeValue == 1;
-            m_WhiteboardPanels = modeValue == 2;
-
             m_PanelLayout = (PanelLayout)modeValue;
 
             // hack, add classroom to the list if it isn't already there
             // When this tag is present, the brush list will be filtered to the relevant ones
-            if (m_WhiteboardPanels || m_PanelLayout == PanelLayout.Classroom)
+            if (m_PanelLayout == PanelLayout.Classroom)
             {
                 _AddIncludeTag("classroom");
                 _RemoveIncludeTag("default");
@@ -722,8 +718,8 @@ namespace TiltBrush
                 if (!IsPanelUnique(panel.Type))
                 {
                     PanelWidget widget = m_AllPanels[i].m_Widget;
-                    if (m_AdvancedPanels != panel.AdvancedModePanel &&
-                        m_WhiteboardPanels != panel.WhiteboardModePanel)
+                    if (AdvancedLayoutActive() != panel.AdvancedLayoutPanel &&
+                        WhiteboardLayoutActive() != panel.WhiteboardModePanel)
                     {
                         widget.ForceInvisibleForInit();
                     }
@@ -766,12 +762,12 @@ namespace TiltBrush
         // but floating panels never get revived.
         public void ReviveFloatingPanelsForStartup()
         {
-            if (m_AdvancedPanels || m_WhiteboardPanels)
+            if (AdvancedLayoutActive() || WhiteboardLayoutActive())
             {
                 for (int i = 0; i < m_AllPanels.Count; ++i)
                 {
                     BasePanel p = m_AllPanels[i].m_Panel;
-                    bool advancedOrWhiteboard = p.AdvancedModePanel || p.WhiteboardModePanel;
+                    bool advancedOrWhiteboard = p.AdvancedLayoutPanel || p.WhiteboardModePanel;
                     if (!IsPanelUnique(p.Type) && advancedOrWhiteboard && !p.m_Fixed)
                     {
                         m_CachedPanelLayouts.ReviveFloatingPanelWithLayout(p);
@@ -780,40 +776,28 @@ namespace TiltBrush
             }
         }
 
-        public void TogglePanelMode()
+        public void TogglePanelLayout()
         {
             int numberOfLayouts = 3;
             int currentLayout = (int)m_PanelLayout;
             PanelLayout newLayout = (PanelLayout)((currentLayout + 1) % numberOfLayouts);
-            SwitchPanelLayout(newLayout);
+            ChangePanelLayout(newLayout);
         }
 
-        private void SwitchPanelLayout(PanelLayout newMode)
+        public void ChangePanelLayout(PanelLayout newLayout)
         {
-            if (newMode == PanelLayout.Classroom)
-            {
-                m_AdvancedPanels = false;
-                m_WhiteboardPanels = true;
+            m_PanelLayout = newLayout;
 
+            // hack brush changes for layout
+            if (newLayout == PanelLayout.Classroom)
+            {
                 _AddIncludeTag("classroom");
                 _RemoveIncludeTag("default");
             }
-            else if (newMode == PanelLayout.Beginner)
+            else if (newLayout == PanelLayout.Beginner)
             {
-                m_AdvancedPanels = false;
-                m_WhiteboardPanels = false;
-
                 _RemoveIncludeTag("classroom");
                 _AddIncludeTag("default");
-            }
-            else if (newMode == PanelLayout.Advanced)
-            {
-                m_AdvancedPanels = true;
-                m_WhiteboardPanels = false;
-            }
-            else
-            {
-                Debug.LogError("Trying to switch to unknown panel layout");
             }
 
             // If we've been in advanced panels before, just spin around once.
@@ -823,8 +807,8 @@ namespace TiltBrush
 
             // If we haven't been in advanced panels mode before, spin to the tools panel to highlight all
             // the cool stuff that's been unlocked.
-            if ((m_AdvancedPanels || m_WhiteboardPanels) &&
-                !PromoManager.m_Instance.HasPromoBeenCompleted(PromoType.AdvancedPanels))
+            bool shouldSpin = m_PanelLayout == PanelLayout.Advanced || m_PanelLayout == PanelLayout.Classroom;
+            if (shouldSpin && !PromoManager.m_Instance.HasPromoBeenCompleted(PromoType.AdvancedPanels))
             {
                 // Find the tools panel.
                 for (int i = 0; i < m_AllPanels.Count; ++i)
@@ -851,25 +835,12 @@ namespace TiltBrush
             }
             m_AdvancedModeRevealActive = true;
 
-            if (m_AdvancedPanels && m_WhiteboardPanels)
-            {
-                Debug.LogError("should not happen");
-            }
+            PlayerPrefs.SetInt(kPlayerPrefAdvancedMode, (int)m_PanelLayout);
 
-            int modeValue = 0;
-            if (m_AdvancedPanels)
-            {
-                modeValue = 1;
-            }
-            else if (m_WhiteboardPanels)
-            {
-                modeValue = 2;
-            }
-            PlayerPrefs.SetInt(kPlayerPrefAdvancedMode, modeValue);
+            bool advancedAudio = m_PanelLayout == PanelLayout.Advanced || m_PanelLayout == PanelLayout.Classroom;
+            AudioManager.m_Instance.AdvancedModeSwitch(advancedAudio);
 
-            AudioManager.m_Instance.AdvancedModeSwitch(m_AdvancedPanels);
-
-            if (m_AdvancedPanels)
+            if (m_PanelLayout == PanelLayout.Advanced)
             {
                 for (int i = 0; i < m_AllPanels.Count; ++i)
                 {
@@ -879,19 +850,19 @@ namespace TiltBrush
                         continue;
                     }
                     // Turn on panel if it is an advanced panel.
-                    if (panel.AdvancedModePanel && panel.CurrentlyVisibleInAdvancedMode)
+                    if (panel.AdvancedLayoutPanel && panel.CurrentlyVisibleInAdvancedMode)
                     {
                         _RestorePanelInternal(i);
                         panel.ForceUpdatePanelVisuals();
                     }
                     // Turn off panel if it is a basic panel.
-                    if (!panel.AdvancedModePanel)
+                    if (!panel.AdvancedLayoutPanel)
                     {
                         _DismissPanelInternal(i, false);
                     }
                 }
             }
-            else if (m_WhiteboardPanels)
+            else if (m_PanelLayout == PanelLayout.Classroom)
             {
                 for (int i = 0; i < m_AllPanels.Count; ++i)
                 {
@@ -923,13 +894,13 @@ namespace TiltBrush
                         continue;
                     }
                     // Turn on panel basic mode panels.
-                    if (!panel.AdvancedModePanel && !panel.WhiteboardModePanel)
+                    if (!panel.AdvancedLayoutPanel && !panel.WhiteboardModePanel)
                     {
                         _RestorePanelInternal(i);
                         panel.ForceUpdatePanelVisuals();
                     }
                     // Turn off advanced mode panels.
-                    if (panel.AdvancedModePanel || panel.WhiteboardModePanel)
+                    if (panel.AdvancedLayoutPanel || panel.WhiteboardModePanel)
                     {
                         _DismissPanelInternal(i, false);
                     }
@@ -1765,7 +1736,7 @@ namespace TiltBrush
             }
 
             // Write this config to disk.
-            if (m_AdvancedPanels || m_WhiteboardPanels)
+            if (m_PanelLayout == PanelLayout.Advanced)
             {
                 m_CachedPanelLayouts.WriteToDisk(m_AllPanels);
             }
