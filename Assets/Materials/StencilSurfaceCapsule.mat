@@ -40,6 +40,7 @@ Material:
     - _Outline: 0.0002
     - _Shape: 3
     - _UVGridWidth: 0.2
+    - _UVGridWidth2: 0.05
     m_Colors:
     - _BackColor: {r: 0.6838235, g: 0.69908714, b: 1, a: 0.61}
     - _Border: {r: 1, g: 1, b: 1, a: 1}
