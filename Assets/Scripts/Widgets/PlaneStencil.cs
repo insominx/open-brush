@@ -63,6 +63,9 @@ namespace TiltBrush
             Vector3 meshPosition = m_Mesh.transform.localPosition;
             meshPosition.z = m_LayeringOffset;
             m_Mesh.transform.localPosition = meshPosition;
+
+            Shader.SetGlobalFloat(ModifyStencilGridSizeCommand.GlobalGridSizeMultiplierHash, 1.0f);
+            Shader.SetGlobalFloat(ModifyStencilGridSizeCommand.GlobalGridWidthMultiplierHash, 1.0f);
         }
 
         // Determine where the pointer will be snapped or "magnetized" to on the surface

@@ -37,6 +37,7 @@ CGINCLUDE
   uniform float3 _LocalScale;
   uniform float _GridSize;
   uniform float _GlobalGridSizeMultiplier;
+  uniform float _GlobalGridWidthMultiplier;
   uniform float _GridWidth;
   uniform float _FrameWidth;
   uniform float _ModeSwitch;
@@ -97,8 +98,8 @@ CGINCLUDE
     else gridMultiplier = 16;
 #endif
 
-    _GridSize *= gridMultiplier * gridSizeMultiplier;
-    _GridWidth *= gridMultiplier * gridWidthMultiplier;
+    _GridSize *= gridMultiplier * gridSizeMultiplier * _GlobalGridSizeMultiplier;
+    _GridWidth *= gridMultiplier * gridWidthMultiplier * _GlobalGridWidthMultiplier;
     _FrameWidth *= gridMultiplier * UVGridWidthMultiplier;
 
 #ifndef _SHAPE_PLANE

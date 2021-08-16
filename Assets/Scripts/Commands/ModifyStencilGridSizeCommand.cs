@@ -22,6 +22,7 @@ namespace TiltBrush
         private bool m_Final;
 
         public static readonly int GlobalGridSizeMultiplierHash = Shader.PropertyToID("_GlobalGridSizeMultiplier");
+        public static readonly int GlobalGridWidthMultiplierHash = Shader.PropertyToID("_GlobalGridWidthMultiplier");
 
         public ModifyStencilGridSizeCommand(float endSize, bool final = false,
                                             BaseCommand parent = null) : base(parent)

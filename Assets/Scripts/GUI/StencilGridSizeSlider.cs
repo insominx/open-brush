@@ -51,7 +51,7 @@ namespace TiltBrush
         {
             if (WidgetManager.m_Instance != null)
             {
-                float value = WidgetManager.m_Instance.StencilAttractDist;
+                float value = Shader.GetGlobalFloat(ModifyStencilGridSizeCommand.GlobalGridSizeMultiplierHash);
                 float range = m_MaxGridSize - m_MinGridSize;
                 float newSliderValue = (value - m_MinGridSize) / range;
                 UpdateValue(newSliderValue);
