@@ -195,10 +195,10 @@ namespace TiltBrush
 
             if (includeTags == null)
             {
-                Debug.LogError("There will be no brush because none of them are tagged 'include'");
+                Debug.LogError("There will be no brushes because there are no 'include' tags.");
             }
 
-            // Filter m_GuiBrushList down to those that are both 'eligible' and not 'excluded'
+            // Filter m_GuiBrushList down to those that are both 'included' and not 'excluded'
             Brush[] filteredList = m_GuiBrushList.Where((brush) =>
             {
                 // Is this brush excluded?
