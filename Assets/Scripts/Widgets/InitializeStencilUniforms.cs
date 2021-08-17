@@ -29,7 +29,7 @@ namespace TiltBrush
         private void OnDrawGizmos()
         {
             Shader.SetGlobalFloat(ModifyStencilGridSizeCommand.GlobalGridSizeMultiplierHash, 1f);
-            Shader.SetGlobalFloat(ModifyStencilGridSizeCommand.GlobalGridWidthMultiplierHash, 1f);
+            Shader.SetGlobalFloat(ModifyStencilGridWidthCommand.GlobalGridWidthMultiplierHash, 1f);
         }
     }
 } // namespace TiltBrush

@@ -14,25 +14,19 @@
 
 using UnityEngine;
 using System;
+using UnityEngine.Serialization;
 
 namespace TiltBrush
 {
-    public class StencilGridSizeSlider: BaseSlider
+    public class StencilFrameWidthSlider: BaseSlider
     {
-        [SerializeField] private float m_MinGridSize = 0.25f;
-        [SerializeField] private float m_MaxGridSize = 3f;
+        [SerializeField] private float m_MinGridWidth = 0.25f;
+        [SerializeField] private float m_MaxGridWidth = 3f;
 
         void OnEnable()
         {
-            Shader.SetGlobalFloat(ModifyStencilGridSizeCommand.GlobalGridSizeMultiplierHash, 1f);
-            // App.Switchboard.StencilAttractDistChanged += OnStencilAttractDistChanged;
-            OnStencilGridSizeChanged();
-        }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-            // App.Switchboard.StencilAttractDistChanged -= OnStencilAttractDistChanged;
+            Shader.SetGlobalFloat(ModifyStencilFrameWidthCommand.GlobalFrameWidthMultiplierHash, 1f);
+            OnStencilFrameWidthChanged();
         }
 
         public override void UpdateValue(float value)
@@ -40,21 +34,21 @@ namespace TiltBrush
             base.UpdateValue(value);
             SetSliderPositionToReflectValue();
 
-            float gridSize = Mathf.Lerp(m_MinGridSize, m_MaxGridSize, value);
-            Shader.SetGlobalFloat(ModifyStencilGridSizeCommand.GlobalGridSizeMultiplierHash, gridSize);
+            float gridWidth = Mathf.Lerp(m_MinGridWidth, m_MaxGridWidth, value);
+            Shader.SetGlobalFloat(ModifyStencilFrameWidthCommand.GlobalFrameWidthMultiplierHash, gridWidth);
 
             SetDescriptionText(m_DescriptionText, $"{value * 100:0}%");
         }
 
         // If some other logic (not the slider) changes the value, we
         // will be notified here so that we can update the slider visuals
-        private void OnStencilGridSizeChanged()
+        private void OnStencilFrameWidthChanged()
         {
             if (WidgetManager.m_Instance != null)
             {
-                float value = Shader.GetGlobalFloat(ModifyStencilGridSizeCommand.GlobalGridSizeMultiplierHash);
-                float range = m_MaxGridSize - m_MinGridSize;
-                float newSliderValue = (value - m_MinGridSize) / range;
+                float value = Shader.GetGlobalFloat(ModifyStencilFrameWidthCommand.GlobalFrameWidthMultiplierHash);
+                float range = m_MaxGridWidth - m_MinGridWidth;
+                float newSliderValue = (value - m_MinGridWidth) / range;
                 UpdateValue(newSliderValue);
             }
         }
@@ -77,11 +71,11 @@ namespace TiltBrush
         void EndModifyCommand()
         {
             float percent = GetCurrentValue();
-            float displacement = m_MaxGridSize - m_MinGridSize;
-            float newGridSize = m_MinGridSize + percent * displacement;
+            float displacement = m_MaxGridWidth - m_MinGridWidth;
+            float newGridWidth = m_MinGridWidth + percent * displacement;
 
             SketchMemoryScript.m_Instance.PerformAndRecordCommand(
-                new ModifyStencilGridSizeCommand(newGridSize, true));
+                new ModifyStencilFrameWidthCommand(newGridWidth, true));
         }
     }
 } // namespace TiltBrush

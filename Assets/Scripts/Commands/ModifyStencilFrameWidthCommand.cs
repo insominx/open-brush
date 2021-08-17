@@ -15,18 +15,18 @@
 using UnityEngine;
 namespace TiltBrush
 {
-    public class ModifyStencilGridSizeCommand : BaseCommand
+    public class ModifyStencilFrameWidthCommand : BaseCommand
     {
         private readonly float m_StartSize;
         private float m_EndSize;
         private bool m_Final;
 
-        public static readonly int GlobalGridSizeMultiplierHash = Shader.PropertyToID("_GlobalGridSizeMultiplier");
+        public static readonly int GlobalFrameWidthMultiplierHash = Shader.PropertyToID("_GlobalFrameWidthMultiplier");
 
-        public ModifyStencilGridSizeCommand(float endSize, bool final = false,
+        public ModifyStencilFrameWidthCommand(float endSize, bool final = false,
                                             BaseCommand parent = null) : base(parent)
         {
-            m_StartSize = Shader.GetGlobalFloat(GlobalGridSizeMultiplierHash);
+            m_StartSize = Shader.GetGlobalFloat(GlobalFrameWidthMultiplierHash);
             m_EndSize = endSize;
             m_Final = final;
         }
@@ -35,22 +35,22 @@ namespace TiltBrush
 
         protected override void OnUndo()
         {
-            Shader.SetGlobalFloat(GlobalGridSizeMultiplierHash, m_StartSize);
+            Shader.SetGlobalFloat(GlobalFrameWidthMultiplierHash, m_StartSize);
         }
 
         protected override void OnRedo()
         {
-            Shader.SetGlobalFloat(GlobalGridSizeMultiplierHash, m_EndSize);
+            Shader.SetGlobalFloat(GlobalFrameWidthMultiplierHash, m_EndSize);
         }
 
         public override bool Merge(BaseCommand other)
         {
             if (base.Merge(other)) { return true; }
             if (m_Final) { return false; }
-            ModifyStencilGridSizeCommand gridSizeCommand = other as ModifyStencilGridSizeCommand;
-            if (gridSizeCommand == null) { return false; }
-            m_EndSize = gridSizeCommand.m_EndSize;
-            m_Final = gridSizeCommand.m_Final;
+            ModifyStencilFrameWidthCommand gridWidthCommand = other as ModifyStencilFrameWidthCommand;
+            if (gridWidthCommand == null) { return false; }
+            m_EndSize = gridWidthCommand.m_EndSize;
+            m_Final = gridWidthCommand.m_Final;
             return true;
         }
     }

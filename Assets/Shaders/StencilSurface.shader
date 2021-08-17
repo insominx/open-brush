@@ -38,6 +38,7 @@ CGINCLUDE
   uniform float _GridSize;
   uniform float _GlobalGridSizeMultiplier;
   uniform float _GlobalGridWidthMultiplier;
+  uniform float _GlobalFrameWidthMultiplier;
   uniform float _GridWidth;
   uniform float _FrameWidth;
   uniform float _ModeSwitch;
@@ -100,7 +101,7 @@ CGINCLUDE
 
     _GridSize *= gridMultiplier * gridSizeMultiplier * _GlobalGridSizeMultiplier;
     _GridWidth *= gridMultiplier * gridWidthMultiplier * _GlobalGridWidthMultiplier;
-    _FrameWidth *= gridMultiplier * UVGridWidthMultiplier;
+    _FrameWidth *= gridMultiplier * UVGridWidthMultiplier * _GlobalFrameWidthMultiplier;
 
 #ifndef _SHAPE_PLANE
     facings.facingY = pow(dot(i.normal, float3(0,1,0)),4);
