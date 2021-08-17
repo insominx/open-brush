@@ -1284,7 +1284,7 @@ MonoBehaviour:
   m_DescriptionTextExtra: 
   m_DescriptionActivateSpeed: 12
   m_DescriptionZScale: 1
-  m_ButtonTexture: {fileID: 2800000, guid: 2048a8fe7283bdf4ab7fb42386663290, type: 3}
+  m_ButtonTexture: {fileID: 2800000, guid: 6f34ab16fe01b6643a64c90c5d63f722, type: 3}
   m_AtlasTexture: 1
   m_ToggleButton: 1
   m_LongPressReleaseButton: 0
