@@ -15,7 +15,7 @@
 using UnityEngine;
 namespace TiltBrush
 {
-    public class ModifyStencilGridWidthCommand : BaseCommand
+    public class ModifyStencilGridLineWidthCommand : BaseCommand
     {
         private readonly float m_StartSize;
         private float m_EndSize;
@@ -23,7 +23,7 @@ namespace TiltBrush
 
         public static readonly int GlobalGridLineWidthMultiplierHash = Shader.PropertyToID("_GlobalGridLineWidthMultiplier");
 
-        public ModifyStencilGridWidthCommand(float endSize, bool final = false,
+        public ModifyStencilGridLineWidthCommand(float endSize, bool final = false,
                                             BaseCommand parent = null) : base(parent)
         {
             m_StartSize = Shader.GetGlobalFloat(GlobalGridLineWidthMultiplierHash);
@@ -47,10 +47,10 @@ namespace TiltBrush
         {
             if (base.Merge(other)) { return true; }
             if (m_Final) { return false; }
-            ModifyStencilGridWidthCommand gridWidthCommand = other as ModifyStencilGridWidthCommand;
-            if (gridWidthCommand == null) { return false; }
-            m_EndSize = gridWidthCommand.m_EndSize;
-            m_Final = gridWidthCommand.m_Final;
+            ModifyStencilGridLineWidthCommand gridLineWidthCommand = other as ModifyStencilGridLineWidthCommand;
+            if (gridLineWidthCommand == null) { return false; }
+            m_EndSize = gridLineWidthCommand.m_EndSize;
+            m_Final = gridLineWidthCommand.m_Final;
             return true;
         }
     }
