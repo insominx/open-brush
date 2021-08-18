@@ -385,10 +385,10 @@ MonoBehaviour:
   m_MeshCollider: {fileID: 6569620}
   m_ParticleBounds: {x: 0, y: 0, z: 0}
   m_PanelPopUpMap: []
-  m_PanelDescription: Stencil Settings
+  m_PanelDescription: Guide Settings
   m_PanelDescriptionPrefab: {fileID: 160918, guid: 3491f4f01ba6cac47b1633f36d7c6c84,
     type: 3}
-  m_PanelDescriptionOffset: {x: 1, y: 0.5, z: 0}
+  m_PanelDescriptionOffset: {x: 1, y: 0.6, z: 0}
   m_PanelDescriptionColor: {r: 1, g: 1, b: 1, a: 1}
   m_PanelFlairPrefab: {fileID: 0}
   m_PanelFlairOffset: {x: 0, y: 0, z: 0}
@@ -556,7 +556,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2.1055098, y: 1.8451369, z: 0.5}
+  m_Size: {x: 1.8619659, y: 1.5392911, z: 0.5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &176750
 GameObject:
@@ -690,7 +690,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fda994627665a24b888af25f8c55ce4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Icon: {fileID: 2800000, guid: f6c62ff201056114bb4a6d0a97ab0dab, type: 3}
+  m_Icon: {fileID: 2800000, guid: c8848c12b4797314d8055899b5eef959, type: 3}
 --- !u!1 &180590
 GameObject:
   m_ObjectHideFlags: 0
@@ -825,7 +825,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_DescriptionType: 1
   m_DescriptionYOffset: 0
-  m_DescriptionText: Grid Width
+  m_DescriptionText: Grid Line Width
   m_DescriptionTextExtra: 
   m_DescriptionActivateSpeed: 12
   m_DescriptionZScale: 10
@@ -926,7 +926,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fda994627665a24b888af25f8c55ce4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Icon: {fileID: 2800000, guid: 4d74e6fd8da69fc4d9f65aae24fb68e9, type: 3}
+  m_Icon: {fileID: 2800000, guid: b126ac6ef8d5876438d2a62f77f7a53c, type: 3}
 --- !u!1 &1000013067707022
 GameObject:
   m_ObjectHideFlags: 0
@@ -1313,7 +1313,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fda994627665a24b888af25f8c55ce4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Icon: {fileID: 2800000, guid: 7f9a3a0575dfaf64c9f97fbc7e3196fb, type: 3}
+  m_Icon: {fileID: 2800000, guid: 89d7afd12a576604bb5ed1d1d31b862f, type: 3}
 --- !u!1 &1300391717746638
 GameObject:
   m_ObjectHideFlags: 0
@@ -1740,7 +1740,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_DescriptionType: 1
   m_DescriptionYOffset: 0
-  m_DescriptionText: Guide Grid Size
+  m_DescriptionText: Grid Size
   m_DescriptionTextExtra: 
   m_DescriptionActivateSpeed: 12
   m_DescriptionZScale: 10
@@ -2110,7 +2110,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fda994627665a24b888af25f8c55ce4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Icon: {fileID: 2800000, guid: c883bdb8f477f3046a6d23cb6a7ecc6d, type: 3}
+  m_Icon: {fileID: 2800000, guid: 4f2461ff975d8e44bbf447eb31b737be, type: 3}
 --- !u!1 &503458520698396395
 GameObject:
   m_ObjectHideFlags: 0
@@ -2283,7 +2283,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fda994627665a24b888af25f8c55ce4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Icon: {fileID: 2800000, guid: c883bdb8f477f3046a6d23cb6a7ecc6d, type: 3}
+  m_Icon: {fileID: 2800000, guid: ac741b9141f494940b2f8a362ff3f403, type: 3}
 --- !u!1 &933719575830412733
 GameObject:
   m_ObjectHideFlags: 0
@@ -2437,7 +2437,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fda994627665a24b888af25f8c55ce4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Icon: {fileID: 2800000, guid: 7f9a3a0575dfaf64c9f97fbc7e3196fb, type: 3}
+  m_Icon: {fileID: 2800000, guid: 1ecda1c4833de75448141d25e5b7f12e, type: 3}
 --- !u!1 &1479591078748344970
 GameObject:
   m_ObjectHideFlags: 0
