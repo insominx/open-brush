@@ -733,8 +733,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.181115, y: 0.96581644, z: 0.1}
-  m_Center: {x: -0.0031256676, y: -0.05127492, z: 0}
+  m_Size: {x: 0.5, y: 0.96581644, z: 0.05}
+  m_Center: {x: 0, y: -0.05127492, z: 0}
 --- !u!1 &184986
 GameObject:
   m_ObjectHideFlags: 0
@@ -832,7 +832,7 @@ MonoBehaviour:
   m_Nob: {fileID: 150666}
   m_Mesh: {fileID: 2321374}
   m_MinGridWidth: 0.01
-  m_MaxGridWidth: 3
+  m_MaxGridWidth: 4
 --- !u!1 &192934
 GameObject:
   m_ObjectHideFlags: 0
@@ -1593,8 +1593,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.181115, y: 0.96581644, z: 0.1}
-  m_Center: {x: -0.0031256676, y: -0.05127492, z: 0}
+  m_Size: {x: 0.5, y: 0.96581644, z: 0.05}
+  m_Center: {x: 0, y: -0.05127492, z: 0}
 --- !u!1 &1580425292155564
 GameObject:
   m_ObjectHideFlags: 0
@@ -2343,7 +2343,7 @@ MonoBehaviour:
   m_Nob: {fileID: 6180347817633774492}
   m_Mesh: {fileID: 648573723663122901}
   m_MinGridWidth: 0
-  m_MaxGridWidth: 3
+  m_MaxGridWidth: 4
 --- !u!1 &1232581600304147628
 GameObject:
   m_ObjectHideFlags: 0
@@ -2573,8 +2573,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.181115, y: 0.96581644, z: 0.1}
-  m_Center: {x: -0.0031256676, y: -0.05127492, z: 0}
+  m_Size: {x: 0.5, y: 0.96581644, z: 0.05}
+  m_Center: {x: 0, y: -0.05127492, z: 0}
 --- !u!1 &3359552178535963255
 GameObject:
   m_ObjectHideFlags: 0
@@ -3303,7 +3303,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_DescriptionType: 1
   m_DescriptionYOffset: 0
-  m_DescriptionText: Snap Distance
+  m_DescriptionText: Pointer Snap Distance
   m_DescriptionTextExtra: 
   m_DescriptionActivateSpeed: 12
   m_DescriptionZScale: 10
@@ -3353,5 +3353,5 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.181115, y: 0.96581644, z: 0.1}
-  m_Center: {x: -0.0031256676, y: -0.05127492, z: 0}
+  m_Size: {x: 0.5, y: 0.96581644, z: 0.05}
+  m_Center: {x: 0, y: -0.05127492, z: 0}

@@ -65,7 +65,7 @@ namespace TiltBrush
             m_Mesh.transform.localPosition = meshPosition;
 
             Shader.SetGlobalFloat(ModifyStencilGridSizeCommand.GlobalGridSizeMultiplierHash, 1.0f);
-            Shader.SetGlobalFloat(ModifyStencilGridWidthCommand.GlobalGridWidthMultiplierHash, 1.0f);
+            Shader.SetGlobalFloat(ModifyStencilGridWidthCommand.GlobalGridLineWidthMultiplierHash, 1.0f);
             Shader.SetGlobalFloat(ModifyStencilFrameWidthCommand.GlobalFrameWidthMultiplierHash, 1.0f);
         }
 

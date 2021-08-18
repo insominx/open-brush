@@ -21,12 +21,12 @@ namespace TiltBrush
         private float m_EndSize;
         private bool m_Final;
 
-        public static readonly int GlobalGridWidthMultiplierHash = Shader.PropertyToID("_GlobalGridWidthMultiplier");
+        public static readonly int GlobalGridLineWidthMultiplierHash = Shader.PropertyToID("_GlobalGridLineWidthMultiplier");
 
         public ModifyStencilGridWidthCommand(float endSize, bool final = false,
                                             BaseCommand parent = null) : base(parent)
         {
-            m_StartSize = Shader.GetGlobalFloat(GlobalGridWidthMultiplierHash);
+            m_StartSize = Shader.GetGlobalFloat(GlobalGridLineWidthMultiplierHash);
             m_EndSize = endSize;
             m_Final = final;
         }
@@ -35,12 +35,12 @@ namespace TiltBrush
 
         protected override void OnUndo()
         {
-            Shader.SetGlobalFloat(GlobalGridWidthMultiplierHash, m_StartSize);
+            Shader.SetGlobalFloat(GlobalGridLineWidthMultiplierHash, m_StartSize);
         }
 
         protected override void OnRedo()
         {
-            Shader.SetGlobalFloat(GlobalGridWidthMultiplierHash, m_EndSize);
+            Shader.SetGlobalFloat(GlobalGridLineWidthMultiplierHash, m_EndSize);
         }
 
         public override bool Merge(BaseCommand other)
