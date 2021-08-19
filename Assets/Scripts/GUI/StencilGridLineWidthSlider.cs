@@ -18,15 +18,15 @@ using UnityEngine.Serialization;
 
 namespace TiltBrush
 {
-    public class StencilFrameWidthSlider : BaseSlider
+    public class StencilGridLineWidthSlider : BaseSlider
     {
         [SerializeField] private float m_MinGridWidth = 0.25f;
         [SerializeField] private float m_MaxGridWidth = 3f;
 
         void OnEnable()
         {
-            Shader.SetGlobalFloat(ModifyStencilFrameWidthCommand.GlobalFrameWidthMultiplierHash, 1f);
-            OnStencilFrameWidthChanged();
+            Shader.SetGlobalFloat(ModifyStencilGridLineWidthCommand.GlobalGridLineWidthMultiplierHash, 1f);
+            OnStencilGridWidthChanged();
         }
 
         public override void UpdateValue(float value)
@@ -35,18 +35,18 @@ namespace TiltBrush
             SetSliderPositionToReflectValue();
 
             float gridWidth = Mathf.Lerp(m_MinGridWidth, m_MaxGridWidth, value);
-            Shader.SetGlobalFloat(ModifyStencilFrameWidthCommand.GlobalFrameWidthMultiplierHash, gridWidth);
+            Shader.SetGlobalFloat(ModifyStencilGridLineWidthCommand.GlobalGridLineWidthMultiplierHash, gridWidth);
 
             SetDescriptionText(m_DescriptionText, $"{value * 100:0}%");
         }
 
         // If some other logic (not the slider) changes the value, we
         // will be notified here so that we can update the slider visuals
-        private void OnStencilFrameWidthChanged()
+        private void OnStencilGridWidthChanged()
         {
             if (WidgetManager.m_Instance != null)
             {
-                float value = Shader.GetGlobalFloat(ModifyStencilFrameWidthCommand.GlobalFrameWidthMultiplierHash);
+                float value = Shader.GetGlobalFloat(ModifyStencilGridLineWidthCommand.GlobalGridLineWidthMultiplierHash);
                 float range = m_MaxGridWidth - m_MinGridWidth;
                 float newSliderValue = (value - m_MinGridWidth) / range;
                 UpdateValue(newSliderValue);
@@ -74,7 +74,7 @@ namespace TiltBrush
             float newGridWidth = Mathf.Lerp(m_MinGridWidth, m_MaxGridWidth, percent);
 
             SketchMemoryScript.m_Instance.PerformAndRecordCommand(
-                new ModifyStencilFrameWidthCommand(newGridWidth, true));
+                new ModifyStencilGridLineWidthCommand(newGridWidth, true));
         }
     }
 } // namespace TiltBrush

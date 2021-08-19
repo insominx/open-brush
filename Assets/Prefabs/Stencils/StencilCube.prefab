@@ -168,7 +168,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4000013352147010}
   - component: {fileID: 114000014087559444}
-  - component: {fileID: 6727829339702046776}
+  - component: {fileID: -4058774536632513417}
   m_Layer: 10
   m_Name: StencilCube
   m_TagString: Untagged
@@ -248,7 +248,7 @@ MonoBehaviour:
   m_StayInsideEdges: 1
   m_PreviewClampPreference: 1.1
   m_StickyFaceHalfWidthBloat: 0.075
---- !u!114 &6727829339702046776
+--- !u!114 &-4058774536632513417
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -257,7 +257,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1000012669655704}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 78be024eae52e6848954b8c704a0f0fe, type: 3}
+  m_Script: {fileID: 11500000, guid: 9e1deace3c24f7546bd498574c9382c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1000012896824236

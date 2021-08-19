@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4000011963436858}
   - component: {fileID: 114000010150538192}
-  - component: {fileID: 7366284309096161166}
+  - component: {fileID: 120208921833142187}
   m_Layer: 10
   m_Name: StencilSphere
   m_TagString: Untagged
@@ -72,7 +72,7 @@ MonoBehaviour:
   m_TintColor: {r: 1, g: 1, b: 1, a: 1}
   m_StencilGrabDistance: 1
   m_PointerLiftSlope: 0.0002
---- !u!114 &7366284309096161166
+--- !u!114 &120208921833142187
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -81,7 +81,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1000011148842312}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 78be024eae52e6848954b8c704a0f0fe, type: 3}
+  m_Script: {fileID: 11500000, guid: 9e1deace3c24f7546bd498574c9382c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1000011619151448

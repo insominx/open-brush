@@ -2614,6 +2614,20 @@ namespace TiltBrush
         {
             App.BrushColor.CurrentColor = col;
         }
+
+        [ContextMenu("Set Whiteboard Defaults")]
+        void SetWhiteboardDefaults()
+        {
+            for (var index = 0; index < m_PanelMap.Length; index++)
+            {
+                PanelMapKey mapKey = m_PanelMap[index];
+                if (mapKey.m_Advanced)
+                {
+                    mapKey.m_Whiteboard = true;
+                    m_PanelMap[index] = mapKey;
+                }
+            }
+        }
     }
 
 } // namespace TiltBrush

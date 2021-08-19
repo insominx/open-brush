@@ -34,10 +34,8 @@ Material:
     m_Floats:
     - _Cutoff: 0.527
     - _FrameWidth: 0.025
-    - _GridLineWidth: 0.01
     - _GridSize: 0.2
-    - _GridSizeMultiplier: 2
-    - _GridWidth: 0.01
+    - _GridLineWidth: 0.01
     - _InvFade: 1
     - _ModeSwitch: 2
     - _Outline: 0.008
