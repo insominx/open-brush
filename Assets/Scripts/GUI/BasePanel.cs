@@ -105,6 +105,7 @@ namespace TiltBrush
             CameraPath,
             BrushLab,
             Whiteboard = 20000,
+            CommonTools = 20010,
             StencilSettings = 20200
         }
 
@@ -297,7 +298,7 @@ namespace TiltBrush
         }
         public PanelWidget WidgetSibling { get { return m_WidgetSibling; } }
         public bool AdvancedLayoutPanel { get { return m_AdvancedLayoutPanel; } }
-        public bool WhiteboardModePanel { get { return m_WhiteboardLayoutPanel; } }
+        public bool WhiteboardLayoutPanel { get { return m_WhiteboardLayoutPanel; } }
         public bool CurrentlyVisibleInAdvancedMode { get { return m_CurrentlyVisibleInAdvancedMode; } }
         public bool CurrentlyVisibleInWhiteboardMode { get { return m_CurrentlyVisibleInWhiteboardMode; } }
         public Vector3 ParticleBounds { get { return m_ParticleBounds; } }

@@ -240,9 +240,9 @@ namespace TiltBrush
                 get
                 {
                     bool isAdmin = m_Instance.IsAdminPanel(m_Panel.Type);
-                    bool beginner = m_Instance.BeginnerLayoutActive() && !m_Panel.AdvancedLayoutPanel && !m_Panel.WhiteboardModePanel;
+                    bool beginner = m_Instance.BeginnerLayoutActive() && !m_Panel.AdvancedLayoutPanel && !m_Panel.WhiteboardLayoutPanel;
                     bool advanced = m_Instance.AdvancedLayoutActive() && m_Panel.AdvancedLayoutPanel;
-                    bool whiteboard = m_Instance.WhiteboardLayoutActive() && m_Panel.WhiteboardModePanel;
+                    bool whiteboard = m_Instance.WhiteboardLayoutActive() && m_Panel.WhiteboardLayoutPanel;
                     // Admin panel is always available.
                     return isAdmin || beginner || advanced || whiteboard;
                 }
@@ -256,7 +256,8 @@ namespace TiltBrush
         private List<BasePanel> m_BrushLabPanels;
         private BasePanel m_AdminPanel;
 
-        private AdvancedPanelLayouts m_CachedPanelLayouts;
+        private AdvancedPanelLayouts m_CachedAdvancedPanelLayouts;
+        private ClassroomPanelLayouts m_CachedClassroomPanelLayouts;
 
         // The current rotation of the panels, accumulated from frame to frame
         private float m_WandPanelsOriginAngle;
@@ -440,8 +441,11 @@ namespace TiltBrush
             }
 
             // Cache any advanced panel layout we can pull from disk.
-            m_CachedPanelLayouts = new AdvancedPanelLayouts();
-            m_CachedPanelLayouts.PopulateFromPlayerPrefs();
+            m_CachedAdvancedPanelLayouts = new AdvancedPanelLayouts();
+            m_CachedAdvancedPanelLayouts.PopulateFromPlayerPrefs();
+
+            m_CachedClassroomPanelLayouts = new ClassroomPanelLayouts();
+            m_CachedClassroomPanelLayouts.PopulateFromPlayerPrefs();
 
             // Run through our panel map and create each panel, if it is valid for this SDK Mode.
             for (int i = 0; i < m_PanelMap.Length; ++i)
@@ -545,10 +549,15 @@ namespace TiltBrush
 
                 // See if this panel has a cached attributes.
                 bool attributesFromDisk = false;
-                if (advancedPanel || whiteboardPanel)
+                if (advancedPanel)
                 {
-                    attributesFromDisk = m_CachedPanelLayouts.ApplyLayoutToPanel(p);
+                    attributesFromDisk = m_CachedAdvancedPanelLayouts.ApplyLayoutToPanel(p);
                 }
+                else if (whiteboardPanel)
+                {
+                    attributesFromDisk = m_CachedClassroomPanelLayouts.ApplyLayoutToPanel(p);
+                }
+
                 if (!attributesFromDisk)
                 {
                     p.m_Fixed = p.BeginFixed;
@@ -719,7 +728,7 @@ namespace TiltBrush
                 {
                     PanelWidget widget = m_AllPanels[i].m_Widget;
                     if (AdvancedLayoutActive() != panel.AdvancedLayoutPanel &&
-                        WhiteboardLayoutActive() != panel.WhiteboardModePanel)
+                        WhiteboardLayoutActive() != panel.WhiteboardLayoutPanel)
                     {
                         widget.ForceInvisibleForInit();
                     }
@@ -762,15 +771,25 @@ namespace TiltBrush
         // but floating panels never get revived.
         public void ReviveFloatingPanelsForStartup()
         {
-            if (AdvancedLayoutActive() || WhiteboardLayoutActive())
+            if (AdvancedLayoutActive())
             {
-                for (int i = 0; i < m_AllPanels.Count; ++i)
+                foreach (var t in m_AllPanels)
                 {
-                    BasePanel p = m_AllPanels[i].m_Panel;
-                    bool advancedOrWhiteboard = p.AdvancedLayoutPanel || p.WhiteboardModePanel;
-                    if (!IsPanelUnique(p.Type) && advancedOrWhiteboard && !p.m_Fixed)
+                    BasePanel p = t.m_Panel;
+                    if (!IsPanelUnique(p.Type) && p.AdvancedLayoutPanel && !p.m_Fixed)
                     {
-                        m_CachedPanelLayouts.ReviveFloatingPanelWithLayout(p);
+                        m_CachedAdvancedPanelLayouts.ReviveFloatingPanelWithLayout(p);
+                    }
+                }
+            }
+            else if (WhiteboardLayoutActive())
+            {
+                foreach (var t in m_AllPanels)
+                {
+                    BasePanel p = t.m_Panel;
+                    if (!IsPanelUnique(p.Type) && p.WhiteboardLayoutPanel && !p.m_Fixed)
+                    {
+                        m_CachedClassroomPanelLayouts.ReviveFloatingPanelWithLayout(p);
                     }
                 }
             }
@@ -872,13 +891,13 @@ namespace TiltBrush
                         continue;
                     }
                     // Turn on panel if it is an whiteboard panel.
-                    if (panel.WhiteboardModePanel && panel.CurrentlyVisibleInWhiteboardMode)
+                    if (panel.WhiteboardLayoutPanel && panel.CurrentlyVisibleInWhiteboardMode)
                     {
                         _RestorePanelInternal(i);
                         panel.ForceUpdatePanelVisuals();
                     }
                     // Turn off panel if it is a basic panel.
-                    if (!panel.WhiteboardModePanel)
+                    if (!panel.WhiteboardLayoutPanel)
                     {
                         _DismissPanelInternal(i, false);
                     }
@@ -894,13 +913,13 @@ namespace TiltBrush
                         continue;
                     }
                     // Turn on panel basic mode panels.
-                    if (!panel.AdvancedLayoutPanel && !panel.WhiteboardModePanel)
+                    if (!panel.AdvancedLayoutPanel && !panel.WhiteboardLayoutPanel)
                     {
                         _RestorePanelInternal(i);
                         panel.ForceUpdatePanelVisuals();
                     }
                     // Turn off advanced mode panels.
-                    if (panel.AdvancedLayoutPanel || panel.WhiteboardModePanel)
+                    if (panel.AdvancedLayoutPanel || panel.WhiteboardLayoutPanel)
                     {
                         _DismissPanelInternal(i, false);
                     }
@@ -1738,7 +1757,12 @@ namespace TiltBrush
             // Write this config to disk.
             if (m_PanelLayout == PanelLayout.Advanced)
             {
-                m_CachedPanelLayouts.WriteToDisk(m_AllPanels);
+                m_CachedAdvancedPanelLayouts.WriteToDisk(m_AllPanels);
+            }
+
+            if (m_PanelLayout == PanelLayout.Classroom)
+            {
+                m_CachedClassroomPanelLayouts.WriteToDisk(m_AllPanels);
             }
         }
 
@@ -2508,7 +2532,18 @@ namespace TiltBrush
                 {
                     m_AllPanels[i].m_Panel.m_Fixed = false;
                     _DismissPanelInternal(i);
-                    m_CachedPanelLayouts.WriteToDisk(m_AllPanels);
+
+                    if (m_AllPanels[i].m_Panel.AdvancedLayoutPanel)
+                    {
+                        m_CachedAdvancedPanelLayouts.WriteToDisk(m_AllPanels);
+                    } else if (m_AllPanels[i].m_Panel.WhiteboardLayoutPanel)
+                    {
+                       m_CachedClassroomPanelLayouts.WriteToDisk(m_AllPanels);
+                    }
+                    else
+                    {
+                        Debug.LogError("should not be here?");
+                    }
 
                     // Are we really supposed to be able to break here?  If so, this prevents the panels that exist
                     // in both "advanced" and "whiteboard" layouts from hiding the panel

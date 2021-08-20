@@ -27368,7 +27368,7 @@ MonoBehaviour:
     m_ModeGvr: 0
     m_Basic: 0
     m_Advanced: 1
-    m_Whiteboard: 1
+    m_Whiteboard: 0
   - m_PanelPrefab: {fileID: 1543516286980528, guid: 8143a5d07ca44f3469740c23ad742c85,
       type: 3}
     m_ModeVr: 0
