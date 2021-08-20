@@ -2509,7 +2509,10 @@ namespace TiltBrush
                     m_AllPanels[i].m_Panel.m_Fixed = false;
                     _DismissPanelInternal(i);
                     m_CachedPanelLayouts.WriteToDisk(m_AllPanels);
-                    break;
+
+                    // Are we really supposed to be able to break here?  If so, this prevents the panels that exist
+                    // in both "advanced" and "whiteboard" layouts from hiding the panel
+                    // break;
                 }
             }
         }
