@@ -830,7 +830,7 @@ MonoBehaviour:
   m_Nob: {fileID: 150666}
   m_Mesh: {fileID: 2321374}
   m_MinGridWidth: 0.01
-  m_MaxGridWidth: 4
+  m_MaxGridWidth: 5
 --- !u!1 &192934
 GameObject:
   m_ObjectHideFlags: 0
@@ -1531,7 +1531,7 @@ MonoBehaviour:
   m_Nob: {fileID: 1580425292155564}
   m_Mesh: {fileID: 23664233917765338}
   m_MinGridSize: 0.01
-  m_MaxGridSize: 3
+  m_MaxGridSize: 5
 --- !u!1 &1744263076835604
 GameObject:
   m_ObjectHideFlags: 0
@@ -2048,7 +2048,7 @@ MonoBehaviour:
   m_Nob: {fileID: 6180347817633774492}
   m_Mesh: {fileID: 648573723663122901}
   m_MinGridWidth: 0
-  m_MaxGridWidth: 4
+  m_MaxGridWidth: 5
 --- !u!1 &1232581600304147628
 GameObject:
   m_ObjectHideFlags: 0
