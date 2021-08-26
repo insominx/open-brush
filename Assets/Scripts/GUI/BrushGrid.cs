@@ -68,7 +68,7 @@ namespace TiltBrush
             BrushController.m_Instance.BrushSetToDefault += OnBrushSetToDefault;
             BrushController.m_Instance.StrokeSelected += OnStrokeSelected;
             App.Switchboard.AudioReactiveStateChanged += OnAudioReactiveStateChanged;
-            App.Switchboard.PanelModeChanged += OnPanelModeChanged;
+            App.Switchboard.PanelLayoutChanged += OnPanelLayoutChanged;
 
             // Cache brush buttons.
             m_BrushButtons = GetComponentsInChildren<BrushTypeButton>();
@@ -311,7 +311,7 @@ namespace TiltBrush
             ResetPages();
         }
 
-        void OnPanelModeChanged()
+        void OnPanelLayoutChanged()
         {
             ResetPages();
         }

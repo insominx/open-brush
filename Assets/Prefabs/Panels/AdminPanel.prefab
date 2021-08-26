@@ -2739,7 +2739,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 966572683720349948}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c6859eec74651247968d56b594ac313, type: 3}
+  m_Script: {fileID: 11500000, guid: e007127002ee06c4a9d9dd29eabb3fed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_DescriptionType: 0
@@ -2769,3 +2769,9 @@ MonoBehaviour:
   m_ToggleOnTexture: {fileID: 0}
   m_AllowUnavailable: 0
   m_LinkedUIObject: {fileID: 0}
+  m_BegginerLayoutTexture: {fileID: 2800000, guid: 6a0f5802d408e984bbd72168015e36cd,
+    type: 3}
+  m_AdvancedLayoutTexture: {fileID: 2800000, guid: 6e03e392d49d47f428a7fd6e63d14606,
+    type: 3}
+  m_ClassroomLayoutTexture: {fileID: 2800000, guid: 88346ae9f505d1c439f43b32fe006bcb,
+    type: 3}

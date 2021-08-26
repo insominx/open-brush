@@ -21,7 +21,7 @@ namespace TiltBrush
         public event Action ToolChanged;
         public event Action MirrorVisibilityChanged;
         public event Action PanelDismissed;
-        public event Action PanelModeChanged;
+        public event Action PanelLayoutChanged;
         public event Action StencilModeChanged;
         public event Action StencilAttractDistChanged;
         public event Action AudioReactiveStateChanged;
@@ -38,14 +38,14 @@ namespace TiltBrush
         public event Action<VideoWidget> VideoWidgetActivated;
         public event Action VideoRecordingStopped;
 
-        public void TriggerAdvancedPanelsChanged()
+        public void TriggerPanelLayoutChanged()
         {
             // Poking the current color notifies listeners, specifically the color picker,
             // which then updates to reflect the current color.
             // This keeps the beginner and advanced color pickers in sync when the mode changes.
             App.BrushColor.CurrentColor = App.BrushColor.CurrentColor;
 
-            PanelModeChanged?.Invoke();
+            PanelLayoutChanged?.Invoke();
         }
 
         public void TriggerToolChanged()

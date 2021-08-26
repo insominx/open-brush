@@ -943,7 +943,7 @@ namespace TiltBrush
                 }
             }
 
-            App.Switchboard.TriggerAdvancedPanelsChanged();
+            App.Switchboard.TriggerPanelLayoutChanged();
         }
 
         IEnumerable<PanelData> GetFixedPanels()
