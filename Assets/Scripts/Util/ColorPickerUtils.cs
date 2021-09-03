@@ -543,7 +543,7 @@ namespace TiltBrush
             }
         }
 
-        static void MakeLightnessRamp(HSLColor hsl, int width, int height, Color[] buf)
+        public static void MakeLightnessRamp(HSLColor hsl, int width, int height, Color[] buf)
         {
             Debug.Assert(buf.Length == width * height);
             hsl.a = 1;
