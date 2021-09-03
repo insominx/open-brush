@@ -673,9 +673,6 @@ MonoBehaviour:
   m_DescriptionTextExtra: 
   m_DescriptionActivateSpeed: 12
   m_DescriptionZScale: 1
-  m_includeBeginnerMode: 0
-  m_includeAdvancedMode: 0
-  m_includeWhiteboardMode: 1
   m_PrevButton: {fileID: 1363341550207350}
   m_NextButton: {fileID: 1057002490137040}
   m_PadSwipeGiveExponent: 0.25
