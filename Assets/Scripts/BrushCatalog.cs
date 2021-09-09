@@ -233,7 +233,7 @@ namespace TiltBrush
             Dictionary<string, string[]> tagsToRemoveMap = App.UserConfig.Brushes.RemoveTagsFromBrushes;
 
             // Add tags
-            foreach (KeyValuePair<string,string[]> brushTagsPair in tagsToAddMap)
+            foreach (KeyValuePair<string, string[]> brushTagsPair in tagsToAddMap)
             {
                 Brush brush = _FindBrushByDescription(brushTagsPair.Key);
                 if (brush)
@@ -249,7 +249,7 @@ namespace TiltBrush
             }
 
             // Remove tags
-            foreach (KeyValuePair<string,string[]> brushTagsPair in tagsToRemoveMap)
+            foreach (KeyValuePair<string, string[]> brushTagsPair in tagsToRemoveMap)
             {
                 Brush brush = _FindBrushByDescription(brushTagsPair.Key);
                 if (brush)
