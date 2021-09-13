@@ -1198,8 +1198,10 @@ namespace TiltBrush
 
         bool CanUsePinCushion()
         {
+            bool advancedOrClassroom = m_PanelManager.AdvancedLayoutActive() || m_PanelManager.WhiteboardLayoutActive();
+
             return (m_ControlsType == ControlsType.SixDofControllers) &&
-                m_PanelManager.AdvancedLayoutActive() &&
+                advancedOrClassroom &&
                 !InputManager.m_Instance.GetCommand(InputManager.SketchCommands.Activate) &&
                 !InputManager.Brush.GetControllerGrip() &&
                 !InputManager.Wand.GetControllerGrip() &&
